@@ -2,6 +2,7 @@ package com.wechat.controller;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wechat.bean.AuthResult;
 import com.wechat.config.AppConfig;
 import com.wechat.config.ReqURL;
 import com.wechat.utils.AuthUtil;
@@ -39,7 +41,8 @@ public class AuthController {
 
 	@Autowired
 	private AppConfig appConfig;
-
+	@Autowired
+	private AuthUtil authUtil;
 	/**
 	 * 微信消息接收和token验证
 	 * 
@@ -90,17 +93,14 @@ public class AuthController {
 	}
 
 	@RequestMapping("wxAuthallBack")
-	public String wxAuthallBack(String code) {
+	public String wxAuthallBack(String code,Model model) {
 		try {
-			String access_token = ReqURL.get_access_token;
-			access_token = access_token.replaceAll("APPID", appConfig.getAppID())
-					.replaceAll("SECRET", appConfig.getAppSecret()).replaceAll("CODE", code);
-			JSONObject jsonObject = AuthUtil.doGetJson(access_token);
-			String openid = jsonObject.getString("openid");
-			String token = jsonObject.getString("access_token");
+			Map<String,Object> doGetAccessToken = authUtil.doGetAccessToken(code);
+			String token=(String) doGetAccessToken.get("access_token");
+			String openid=(String) doGetAccessToken.get("openid");
 			String user_info = ReqURL.get_user_info;
 			user_info = user_info.replaceAll("ACCESS_TOKEN", token).replaceAll("OPENID", openid);
-			JSONObject userInfo = AuthUtil.doGetJson(user_info);
+			JSONObject userInfo = authUtil.doGetJson(user_info);
 			/**
 			 * {
 					"country": "中国",
@@ -114,10 +114,11 @@ public class AuthController {
 					"privilege": []
 				}
 			 */
-			System.out.println(JSONObject.toJSON(userInfo));
+			AuthResult authResult=JSONObject.parseObject(JSONObject.toJSONString(userInfo), AuthResult.class);
+			model.addAttribute("authResult", authResult);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "wxAuthallBack";
+		return "login_result";
 	}
 }

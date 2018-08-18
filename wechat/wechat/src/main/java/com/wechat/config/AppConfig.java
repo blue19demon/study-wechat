@@ -11,7 +11,7 @@ public class AppConfig {
 	// Token
 	private String Token = "imook";
 	// callback_uri
-	private String callback_uri = "http://cf6e6v.natappfree.cc/wxAuthallBack";
+	private String callback_uri = "http://szhvh2.natappfree.cc/wxAuthallBack";
 	// EncodingAESKey
 	private String EncodingAESKey = "hYc4MGwy79rGqyuTO3uZL3vQjcsC7vGet3m0IxVhwGp";
 	public String getAppID() {
