@@ -15,6 +15,7 @@ import org.dom4j.io.SAXReader;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
+import com.wechat.bean.ArticlesMessage;
 import com.wechat.bean.TextMessage;
 
 public class MessageUtil {
@@ -73,4 +74,16 @@ public class MessageUtil {
 		// System.out.println("textMessage");
 		return xstream.toXML(textMessage);
 	}
+	
+	// xtream jar包 -> XStrem类提供对象转xml
+		public static String messageToXml(ArticlesMessage message) {
+			// System.out.println("进textMessageToXml");
+			/**
+			 * new StaxDriver()这个很重要 没有这个就错了 XStream xstream=new XStream(new StaxDriver());
+			 */
+			XStream xstream = new XStream(new StaxDriver());
+			xstream.alias("xml", message.getClass());
+			// System.out.println("textMessage");
+			return xstream.toXML(message);
+		}
 }
