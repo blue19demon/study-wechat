@@ -144,6 +144,26 @@ public class CustomerController {
 		item1.setPicUrl("https://ss0.baidu.com/73x1bjeh1BF3odCf/it/u=1163727520,2326205650&fm=85&s=FAD05B8DC2B02637103D65850300B097");
 		item1.setUrl("https://github.com/1843080373/study-wechat");
 		articles.add(item1);
+		ArticlesItem item2 = new ArticlesItem();
+		item2.setTitle("晚天吹凉风");
+		item2.setDescription("点击进入晚天吹凉风博客");
+		item2.setPicUrl("https://ss0.baidu.com/73x1bjeh1BF3odCf/it/u=1163727520,2326205650&fm=85&s=FAD05B8DC2B02637103D65850300B097");
+		item2.setUrl("https://github.com/1843080373/study-wechat");
+		articles.add(item2);
+		
+		ArticlesItem item3 = new ArticlesItem();
+		item3.setTitle("晚天吹凉风");
+		item3.setDescription("点击进入晚天吹凉风博客");
+		item3.setPicUrl("https://ss0.baidu.com/73x1bjeh1BF3odCf/it/u=1163727520,2326205650&fm=85&s=FAD05B8DC2B02637103D65850300B097");
+		item3.setUrl("https://github.com/1843080373/study-wechat");
+		articles.add(item3);
+		
+		ArticlesItem item4 = new ArticlesItem();
+		item4.setTitle("晚天吹凉风");
+		item4.setDescription("点击进入晚天吹凉风博客");
+		item4.setPicUrl("https://ss0.baidu.com/73x1bjeh1BF3odCf/it/u=1163727520,2326205650&fm=85&s=FAD05B8DC2B02637103D65850300B097");
+		item4.setUrl("https://github.com/1843080373/study-wechat");
+		articles.add(item4);
 		outputMsg.setArticles(articles);
 		outputMsg.setArticleCount(articles.size());
 		return outputMsg;
