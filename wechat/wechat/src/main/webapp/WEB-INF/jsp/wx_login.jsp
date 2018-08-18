@@ -10,5 +10,6 @@
 </head>
 <body>
 <a href="wxAuth" >微信第三方登录</a><br/>
+<a href="sendTemplateMsg" >微信发送模板消息</a><br/>
 </body>
 </html>
