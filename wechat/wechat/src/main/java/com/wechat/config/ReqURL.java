@@ -27,4 +27,16 @@ public interface ReqURL {
 	 * 获取access_token的接口地址（GET） 限200（次/天）
 	 */
     public final static String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+    /**
+	 * 自定义菜单创建接口
+	 */
+    public final static String create_menu = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
+    /**
+	 * 自定义菜单删除接口
+	 */
+    public final static String delete_menu = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN";
+    /**
+   	 * 创建个性化菜单
+   	 */
+     public final static String addconditional_menu = "https://api.weixin.qq.com/cgi-bin/menu/addconditional?access_token=ACCESS_TOKEN";
 }
