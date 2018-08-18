@@ -23,6 +23,8 @@ public interface ReqURL {
 	 * 发送模板消息POST
 	 */
 	public static final String send_template_msg="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
-    // 获取access_token的接口地址（GET） 限200（次/天）
+	/**
+	 * 获取access_token的接口地址（GET） 限200（次/天）
+	 */
     public final static String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 }
