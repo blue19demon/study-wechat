@@ -11,7 +11,7 @@ public class AppConfig {
 	// Token
 	private String Token = "imook";
 	// callback_uri
-	private String callback_uri = "http://zijzyz.natappfree.cc/wxAuthallBack";
+	private String callback_uri = "http://xsusuq.natappfree.cc/m/weChat/unifiedOrder";
 	// EncodingAESKey
 	private String EncodingAESKey = "hYc4MGwy79rGqyuTO3uZL3vQjcsC7vGet3m0IxVhwGp";
 	public String getAppID() {

@@ -29,6 +29,7 @@ import com.wechat.utils.TulingApiUtil;
 @Controller
 public class CustomerController {
 	private String imgMessage = "<xml><ToUserName>TOUSER</ToUserName><FromUserName>FROMUSER</FromUserName><CreateTime>CREATE_TIME</CreateTime><MsgType>image</MsgType><Image><MediaId>MEDIA_ID</MediaId></Image></xml>";
+	private String musicMessage = "<xml><ToUserName>TOUSER</ToUserName><FromUserName>FROMUSER</FromUserName><CreateTime>CREATE_TIME</CreateTime><MsgType>music</MsgType><Music><Title>TITLE</Title><Description>DESCRIPTION</Description><MusicUrl>MUSIC_URL</MusicUrl><HQMusicUrl>HQ_MUSIC_Url</HQMusicUrl><ThumbMediaId>MEDIA_ID</ThumbMediaId></Music></xml>";
 
 	@PostMapping("/ownerCheck")
 	@ResponseBody
@@ -50,6 +51,15 @@ public class CustomerController {
 				else if ("3".equals(content)) {
 				     ArticlesMessage outputMsg = getBlogMessage(fromUserName, toUserName, new Date().getTime());
 				     message = MessageUtil.messageToXml(outputMsg).replaceAll("com.wechat.bean.ArticlesItem", "item");
+				}else if ("4".equals(content)) {
+					message = musicMessage.replace("TOUSER", fromUserName).replace("FROMUSER", toUserName)
+							.replaceAll("CREATE_TIME", String.valueOf(new Date().getTime()))
+							.replace("FROMUSER", toUserName)
+							.replace("TITLE", "顶天立地 (Live)")
+							.replace("DESCRIPTION", "艾热、周汤豪、王齐铭WatchMe、ICE")
+							.replace("MUSIC_URL", "")
+							.replace("HQ_MUSIC_Url", toUserName)
+							.replace("MEDIA_ID", "KDx0LTJLZYdlQKxdg5esSc6YXnYsawMtSCRAaHFro6-9ClnkdTUQIplNF_XUBA-7");
 				}else {
 					TextMessage text = new TextMessage();
 					text.setFromUserName(toUserName);
@@ -71,10 +81,10 @@ public class CustomerController {
 					// 关注
 					StringBuffer contentMsg = new StringBuffer("感谢您关注偶,这里会给您提供最新的资讯和公告！\n");
 					contentMsg.append("您还可以回复下列数字，体验相应服务").append("\n\n");
-					contentMsg.append("1  我是文办").append("\n");
+					contentMsg.append("1  我是文字").append("\n");
 					contentMsg.append("2  我是图片").append("\n");
 					contentMsg.append("3  我是多图文").append("\n");
-
+					contentMsg.append("4 我是音乐").append("\n");
 					TextMessage text = new TextMessage();
 					text.setFromUserName(toUserName);
 					text.setToUserName(fromUserName);
@@ -117,7 +127,6 @@ public class CustomerController {
 						message = MessageUtil.textMessageToXml(text);
 					}
 				}
-
 			}
 			System.out.println(message);
 			return message;

@@ -43,6 +43,10 @@ public class AuthController {
 	private AppConfig appConfig;
 	@Autowired
 	private AuthUtil authUtil;
+	@RequestMapping(value = "weChatPayTest")
+    public String weChatPayTest(HttpServletRequest request,Model model){
+		return "weChatPayTest";
+    }
 	/**
 	 * 微信消息接收和token验证
 	 * 
