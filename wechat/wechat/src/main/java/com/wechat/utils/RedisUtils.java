@@ -8,6 +8,7 @@ public class RedisUtils {
 		 //连接本地的 Redis 服务
         jedis = new Jedis("localhost");
 	}
+	
 	public static String read(String key) {
 		try {
 			return  jedis.get(key);

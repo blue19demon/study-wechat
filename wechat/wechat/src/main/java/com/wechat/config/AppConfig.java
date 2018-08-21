@@ -10,40 +10,58 @@ public class AppConfig {
 	private String AppSecret = "d3ba2d045ffc578abd0e9d23f8c93404";
 	// Token
 	private String Token = "imook";
+	// host
+	private String host = "http://p5m5g8.natappfree.cc";
 	// callback_uri
-	private String callback_uri = "http://xsusuq.natappfree.cc/m/weChat/unifiedOrder";
+	private String callback_uri = "http://p5m5g8.natappfree.cc/m/weChat/unifiedOrder";
 	// EncodingAESKey
 	private String EncodingAESKey = "hYc4MGwy79rGqyuTO3uZL3vQjcsC7vGet3m0IxVhwGp";
+
 	public String getAppID() {
 		return AppID;
 	}
+
 	public void setAppID(String appID) {
 		AppID = appID;
 	}
+
 	public String getAppSecret() {
 		return AppSecret;
 	}
+
 	public void setAppSecret(String appSecret) {
 		AppSecret = appSecret;
 	}
+
 	public String getToken() {
 		return Token;
 	}
+
 	public void setToken(String token) {
 		Token = token;
 	}
-	
+
 	public String getCallback_uri() {
 		return callback_uri;
 	}
+
 	public void setCallback_uri(String callback_uri) {
 		this.callback_uri = callback_uri;
 	}
+
 	public String getEncodingAESKey() {
 		return EncodingAESKey;
 	}
+
 	public void setEncodingAESKey(String encodingAESKey) {
 		EncodingAESKey = encodingAESKey;
 	}
 
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
 }
