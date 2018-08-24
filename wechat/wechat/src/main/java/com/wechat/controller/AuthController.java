@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,14 +41,12 @@ import com.wechat.utils.CheckoutUtil;
  */
 @Controller
 public class AuthController {
-	@Autowired
-	private AppConfig appConfig;
+	private final static Logger logger = LoggerFactory.getLogger(AuthController.class);
+
+	
 	@Autowired
 	private AuthUtil authUtil;
-	@RequestMapping(value = "weChatPayTest")
-    public String weChatPayTest(HttpServletRequest request,Model model){
-		return "weChatPayTest";
-    }
+	
 	/**
 	 * 微信消息接收和token验证
 	 * 
@@ -82,19 +82,7 @@ public class AuthController {
 		return "wx_login";
 	}
 
-	@RequestMapping("wxAuth")
-	public String wxAuth() {
-		try {
-			String auth_login = ReqURL.get_code;
-			auth_login = auth_login.replaceAll("APPID", appConfig.getAppID())
-					.replaceAll("REDIRECT_URI", URLEncoder.encode(appConfig.getCallback_uri(), "UTF-8"))
-					.replaceAll("SCOPE", "snsapi_userinfo");
-			return "redirect:" + auth_login;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "";
-	}
+	
 
 	@RequestMapping("wxAuthallBack")
 	public String wxAuthallBack(String code,Model model) {

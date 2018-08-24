@@ -11,7 +11,8 @@
 </head>
 <body>
 <div class="container" id="container">
-    <a href="wxAuth" class="weui_btn weui_btn_primary">立即支付</a>
+   <h2><a href="unifiedOrder?type=1" class="weui_btn weui_btn_primary">公众号支付</a></h2>
+  <h2><a href="unifiedOrder?type=2" class="weui_btn weui_btn_primary">扫码支付</a></h2>
 </div>
 </body>
 </html>

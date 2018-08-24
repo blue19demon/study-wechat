@@ -8,7 +8,7 @@ import com.wechat.bean.Order;
 public class OrderService {
 
 	public Order get(String state) {
-		return new Order(1);
+		return new Order(100);
 	}
 
 }

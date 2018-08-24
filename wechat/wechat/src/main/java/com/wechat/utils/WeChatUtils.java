@@ -1,10 +1,15 @@
 package com.wechat.utils;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,13 +18,20 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.jdom2.Document;
-
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
@@ -82,8 +94,8 @@ public class WeChatUtils {
      * @param inputStream
      * @return 微信返回的参数集合
      */
-    public static SortedMap<String,Object> parseXml(InputStream inputStream) {
-        SortedMap<String,Object> map = new TreeMap<String,Object>();
+    public static SortedMap<String,String> parseXml(InputStream inputStream) {
+        SortedMap<String,String> map = new TreeMap<String,String>();
         try {
             //获取request输入流
             SAXReader reader = new SAXReader();
@@ -143,4 +155,75 @@ public class WeChatUtils {
         }
         return sb.toString();
     }
+    
+    /** 
+     * 是否签名正确,规则是:按参数名称a-z排序,遇到空值的参数不参加签名。 
+     * @return boolean 
+     */  
+    public static boolean isTenpaySign(Map<String, String> data, String API_KEY) {  
+        StringBuffer sb = new StringBuffer();  
+        Set<String> keySet = data.keySet();
+        String[] keyArray = keySet.toArray(new String[keySet.size()]);
+        Arrays.sort(keyArray);
+        for (String k : keyArray) {
+            String v =data.get(k);  
+            if(!"sign".equals(k) && null != v && !"".equals(v)) {  
+                sb.append(k + "=" + v + "&");  
+            }  
+        }  
+          
+        sb.append("key=" + API_KEY);  
+          
+        //算出摘要  
+        String mysign = MD5Util.MD5Encode(sb.toString(), Charset.defaultCharset().name()).toLowerCase();  
+        String tenpaySign = (data.get("sign")).toLowerCase();  
+          
+        //System.out.println(tenpaySign + "    " + mysign);  
+        return tenpaySign.equals(mysign);  
+    }  
+    
+    /**
+     * 生成支付二维码
+     * @param request
+     * @param response
+     * @param width
+     * @param height
+     * @param text 微信生成预定id时，返回的codeUrl
+     */
+    public static void getQRcode(HttpServletRequest request, HttpServletResponse response, Integer width, Integer height, String text) {
+     if (width == null) {
+      width = 300;
+     }
+     if (height == null) {
+      height = 300;
+     }
+     String format = "jpg";
+     Hashtable hints = new Hashtable();
+     hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+     BitMatrix bitMatrix;
+     try {
+      bitMatrix = new MultiFormatWriter().encode(text, BarcodeFormat.QR_CODE, width, height, hints);
+      MatrixToImageWriter.writeToStream(bitMatrix, format, response.getOutputStream());
+     } catch (WriterException e) {
+      e.printStackTrace();
+     } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+     }
+    }
+	public static String QRfromGoogle(String chl) throws Exception {
+		int widhtHeight = 300;
+		String EC_level = "L";
+		int margin = 0;
+		chl = UrlEncode(chl);
+		String QRfromGoogle = "http://chart.apis.google.com/chart?chs=" + widhtHeight + "x" + widhtHeight
+				+ "&cht=qr&chld=" + EC_level + "|" + margin + "&chl=" + chl;
+ 
+		return QRfromGoogle;
+	}
+	// 特殊字符处理
+	public static String UrlEncode(String src)  throws UnsupportedEncodingException {
+		return URLEncoder.encode(src, "UTF-8").replace("+", "%20");
+	}
+
 }

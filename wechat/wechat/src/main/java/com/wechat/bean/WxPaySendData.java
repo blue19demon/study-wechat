@@ -107,6 +107,9 @@ public class WxPaySendData {
     /**操作员账号:默认为商户号 [必须]*/
     @XStreamAlias("op_user_id")
     private String opUserId;
+    /**扫码支付 [必须]*/
+    @XStreamAlias("code_url")
+    private String codeUrl;
 
 	public String getAppId() {
 		return appId;
@@ -306,6 +309,14 @@ public class WxPaySendData {
 
 	public void setOpUserId(String opUserId) {
 		this.opUserId = opUserId;
+	}
+
+	public String getCodeUrl() {
+		return codeUrl;
+	}
+
+	public void setCodeUrl(String codeUrl) {
+		this.codeUrl = codeUrl;
 	}
  
 }

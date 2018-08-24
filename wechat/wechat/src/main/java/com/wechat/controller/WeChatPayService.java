@@ -17,8 +17,8 @@ public class WeChatPayService {
 	/**
 	*微信支付统一下单
 	**/
-	public static Map<String,Object> unifiedOrder(Order order, Map<String,Object> map){
-	    Map<String,Object> resultMap = null;
+	public static Map<String,String> unifiedOrder(Order order, Map<String,Object> map,String type){
+	    Map<String, String> resultMap = null;
 	    try {
 	            WxPaySendData paySendData = new WxPaySendData();
 	            //构建微信支付请求参数集合
@@ -30,8 +30,12 @@ public class WeChatPayService {
 	            paySendData.setNotifyUrl(WeChatConfig.NOTIFY_URL);
 	            paySendData.setDeviceInfo("WEB");
 	            paySendData.setOutTradeNo(order.getOrderNumber());
-	            paySendData.setTotalFee(order.getSumFee());
-	            paySendData.setTradeType(WeChatConfig.TRADE_TYPE_JSAPI);
+	            paySendData.setTotalFee(179);
+	           if("1".equals(type)) {
+	        	   paySendData.setTradeType(WeChatConfig.TRADE_TYPE_JSAPI);
+	           }else {
+	        	   paySendData.setTradeType(WeChatConfig.TRADE_TYPE_NATIVE);
+	           }
 	            paySendData.setSpBillCreateIp((String) map.get("remoteIp"));
 	            paySendData.setOpenId((String) map.get("openId"));
 	            //将参数拼成map,生产签名
@@ -141,6 +145,9 @@ public class WeChatPayService {
             }
             if (null != data.getRefundFee() && data.getRefundFee()>0){
                 paramters.put("refund_fee",data.getRefundFee());
+            }
+            if (StringUtils.isNotEmpty(data.getCodeUrl())){
+                paramters.put("code_url",data.getCodeUrl());
             }
         }
         return paramters;
