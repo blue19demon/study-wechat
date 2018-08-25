@@ -1,0 +1,85 @@
+公众号支付
+{
+	"appid": "wx4492fde581248a1d",
+	"device_info": "WEB",
+	"err_code": "SUCCESS",
+	"err_code_des": "ok",
+	"mch_id": "1512382871",
+	"nonce_str": "eCKjTJUlXsZV4ymLwQAALlqQehpcx0HA",
+	"prepay_id": "wx20180825101039726264",
+	"result_code": "SUCCESS",
+	"return_code": "SUCCESS",
+	"return_msg": "OK",
+	"sign": "C03F906173449DB528A06CFDE7F539B3",
+	"trade_type": "JSAPI"
+}
+
+{
+	"appid": "wx4492fde581248a1d",
+	"attach": "微信订单支付:1535163255343",
+	"bank_type": "CMC",
+	"cash_fee": "179",
+	"cash_fee_type": "CNY",
+	"device_info": "WEB",
+	"err_code": "SUCCESS",
+	"err_code_des": "SUCCESS",
+	"fee_type": "CNY",
+	"is_subscribe": "Y",
+	"mch_id": "1512382871",
+	"nonce_str": "eCKjTJUlXsZV4ymLwQAALlqQehpcx0HA",
+	"openid": "oUXo10eAYReIil6dUcD5M0aAJPlI",
+	"out_trade_no": "1535163255343",
+	"result_code": "SUCCESS",
+	"return_code": "SUCCESS",
+	"return_msg": "OK",
+	"settlement_total_fee": "179",
+	"sign": "3644483AF61C2F334F1932F14A14B52F",
+	"time_end": "20180825101041",
+	"total_fee": "179",
+	"trade_type": "JSAPI",
+	"transaction_id": "4704663554020180825101041114954"
+}
+
+扫码支付
+
+{
+	"appid": "wx4492fde581248a1d",
+	"code_url": "weixin://wxpay/s/An4baqw",
+	"device_info": "WEB",
+	"err_code": "SUCCESS",
+	"err_code_des": "ok",
+	"mch_id": "1512382871",
+	"nonce_str": "CJlhW1kGdEVUseYtffMsVvXeUTDzxmr4",
+	"prepay_id": "wx20180825101307716666",
+	"result_code": "SUCCESS",
+	"return_code": "SUCCESS",
+	"return_msg": "OK",
+	"sign": "DE735DD4F007EEF08676A87A2ED4DACE",
+	"trade_type": "NATIVE"
+}
+
+{
+	"appid": "wx4492fde581248a1d",
+	"attach": "微信订单支付:1535163403513",
+	"bank_type": "CMC",
+	"cash_fee": "179",
+	"cash_fee_type": "CNY",
+	"device_info": "WEB",
+	"err_code": "SUCCESS",
+	"err_code_des": "SUCCESS",
+	"fee_type": "CNY",
+	"is_subscribe": "Y",
+	"mch_id": "1512382871",
+	"nonce_str": "CJlhW1kGdEVUseYtffMsVvXeUTDzxmr4",
+	"openid": "oUXo10eAYReIil6dUcD5M0aAJPlI",
+	"out_trade_no": "1535163403513",
+	"result_code": "SUCCESS",
+	"return_code": "SUCCESS",
+	"return_msg": "OK",
+	"settlement_total_fee": "179",
+	"sign": "FDD62CBAD7E122691A735BA63F35E77E",
+	"time_end": "20180825101309",
+	"total_fee": "179",
+	"trade_type": "NATIVE",
+	"transaction_id": "4205311962120180825101309928384"
+}

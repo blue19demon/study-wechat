@@ -1,4 +1,4 @@
-package com.wechat.controller;
+package com.wechat.utils;
 
 import java.awt.image.BufferedImage;   
 import java.io.File;
@@ -16,7 +16,6 @@ import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.wechat.utils.MD5Util;
 /**
  * 生成二维码
  *2015年7月7日

@@ -1,0 +1,4 @@
+<xml>
+  <return_code><![CDATA[FAIL]]></return_code>
+  <return_msg><![CDATA[沙箱支付金额不正确，请确认验收case]]></return_msg>
+</xml>

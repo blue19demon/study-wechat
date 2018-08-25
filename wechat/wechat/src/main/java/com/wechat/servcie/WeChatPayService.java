@@ -1,4 +1,4 @@
-package com.wechat.controller;
+package com.wechat.servcie;
 
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
@@ -28,7 +28,8 @@ public class WeChatPayService {
 	            paySendData.setMchId(WeChatConfig.MCH_ID);
 	            paySendData.setNonceStr(WeChatUtils.getRandomStr(32));
 	            paySendData.setNotifyUrl(WeChatConfig.NOTIFY_URL);
-	            paySendData.setDeviceInfo("WEB");
+	            paySendData.setDeviceInfo("sandbox");//沙箱环境
+	            //paySendData.setDeviceInfo("WEB");//真实环境
 	            paySendData.setOutTradeNo(order.getOrderNumber());
 	            paySendData.setTotalFee(179);
 	           if("1".equals(type)) {

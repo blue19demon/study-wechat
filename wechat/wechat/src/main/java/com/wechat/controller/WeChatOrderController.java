@@ -19,13 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
-import com.wechat.bean.AuthToken;
 import com.wechat.bean.Order;
 import com.wechat.config.AppConfig;
 import com.wechat.config.ReqURL;
 import com.wechat.config.WeChatConfig;
 import com.wechat.config.WeChatConstant;
 import com.wechat.servcie.OrderService;
+import com.wechat.servcie.WeChatPayService;
+import com.wechat.utils.GenerateQrCodeUtil;
 import com.wechat.utils.WeChatUtils;
 
 /**
@@ -81,7 +82,8 @@ public class WeChatOrderController{
         String resultCode = (String) resultMap.get("result_code");//交易标识
         //只有当returnCode与resultCode均返回“success”，才代表微信支付统一下单成功
         if (WeChatConstant.RETURN_SUCCESS.equals(resultCode)&&WeChatConstant.RETURN_SUCCESS.equals(returnCode)){
-            if("1".equals(type)) {
+            logger.info("微信统一下单成功:"+JSONObject.toJSONString(resultMap));
+        	if("1".equals(type)) {
             	String appId = (String) resultMap.get("appid");//微信公众号AppId
                 String timeStamp = WeChatUtils.getTimeStamp();//当前时间戳
                 String prepayId = "prepay_id="+resultMap.get("prepay_id");//统一下单返回的预支付id
@@ -97,7 +99,6 @@ public class WeChatOrderController{
                 model.addAttribute("nonceStr",nonceStr);
                 model.addAttribute("prepayId",prepayId);
                 model.addAttribute("paySign",WeChatUtils.getSign(signMap));//获取签名
-                logger.info("微信统一下单成功:"+JSONObject.toJSONString(resultMap));
                 //将支付需要参数返回至页面，采用h5方式调用支付接口
                 return "h5Pay";
             }else {
@@ -132,7 +133,10 @@ public class WeChatOrderController{
       GenerateQrCodeUtil.encodeQrcode(code_url, response);
     }
     
-    @RequestMapping(value = "getWeChatPayReturn")
+    @RequestMapping(value = {
+    		"getWeChatPayReturn",
+    		"getWeChatRefundReturn"
+    })
     public String getWeChatPayReturn(HttpServletRequest request) {
 		try {
 			InputStream inStream = request.getInputStream();
@@ -147,7 +151,6 @@ public class WeChatOrderController{
 				}else {
 					logger.info("验证签名失败！");
 				}
-				
 			}
 			// 通知微信支付系统接收到信息
 			return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
