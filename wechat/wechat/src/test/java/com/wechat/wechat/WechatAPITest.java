@@ -25,6 +25,10 @@ import com.wechat.utils.WeChatUtils;
 public class WechatAPITest {
 	
 	public static void main(String[] args) {
+		getsignkey();
+	}
+
+	public static void downloadfundflow() {
 		try {
 			// 微信下载资金账单，商户可以通过该接口下载自2017年6月1日起 的历史资金流水账单。
 			Map<String, String> param1 = new HashMap<String, String>();

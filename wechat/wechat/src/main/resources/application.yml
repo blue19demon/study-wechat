@@ -6,7 +6,5 @@ spring:
       thymeleaf:
         cache: false
         enabled: false
-      resources:
-        static-locations: classpath:/WEB-INF/resources
-      favicon:
-        enabled: true
+  resources:
+      static-locations: classpath:/WEB-INF/resources

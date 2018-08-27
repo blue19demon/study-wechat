@@ -35,8 +35,8 @@ import com.wechat.utils.WeChatUtils;
  *
  */
 @Controller("weChatOrderController")
-public class WeChatOrderController{
-	private final static Logger logger = LoggerFactory.getLogger(WeChatOrderController.class);
+public class WechatPayController{
+	private final static Logger logger = LoggerFactory.getLogger(WechatPayController.class);
 
     @Autowired
     private OrderService orderService;
