@@ -1,4 +1,4 @@
-package com.wechat.wechat;
+package com.wechat.test;
 
 import java.io.FileWriter;
 import java.io.IOException;

@@ -5,17 +5,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
 	// 应用ID,您的APPID
-	private String AppID = "wx0985b6dbaeeff28c";
+	private String AppID = "wx90afd5a95cf62c57";
 	// AppSecret
-	private String AppSecret = "d3ba2d045ffc578abd0e9d23f8c93404";
+	private String AppSecret = "73071d926b9174529eb433010f1d3586";
 	// Token
-	private String Token = "qixingbao";
+	private String Token = "imook";
 	// host
-	private String host = "http://cpjb82.natappfree.cc";
+	private String host = "http://x3kw28.natappfree.cc";
 	// callback_uri
-	private String callback_uri = "http://cpjb82.natappfree.cc/unifiedOrder";
+	private String callback_uri = host+"/unifiedOrder";
 	// EncodingAESKey
-	private String EncodingAESKey = "hYc4MGwy79rGqyuTO3uZL3vQjcsC7vGet3m0IxVhwGp";
+	private String EncodingAESKey = "pAmEKBy2mIJpYfZRenV3A3qclVi50CsOHVv2hGCC9bd";
 
 	public String getAppID() {
 		return AppID;

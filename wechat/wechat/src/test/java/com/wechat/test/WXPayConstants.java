@@ -1,4 +1,4 @@
-package com.wechat.wechat;
+package com.wechat.test;
 
 import org.apache.http.client.HttpClient;
 

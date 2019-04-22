@@ -1,14 +1,17 @@
 package com.wechat.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,6 +20,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.wechat.bean.ArticlesItem;
 import com.wechat.bean.ArticlesMessage;
 import com.wechat.bean.TextMessage;
+import com.wechat.music.provider.netease.NeteaseMusicApi;
+import com.wechat.music.provider.netease.NeteaseSong;
+import com.wechat.utils.AuthUtil;
 import com.wechat.utils.MessageUtil;
 import com.wechat.utils.TulingApiUtil;
 
@@ -30,7 +36,8 @@ import com.wechat.utils.TulingApiUtil;
 public class CustomerController {
 	private String imgMessage = "<xml><ToUserName>TOUSER</ToUserName><FromUserName>FROMUSER</FromUserName><CreateTime>CREATE_TIME</CreateTime><MsgType>image</MsgType><Image><MediaId>MEDIA_ID</MediaId></Image></xml>";
 	private String musicMessage = "<xml><ToUserName>TOUSER</ToUserName><FromUserName>FROMUSER</FromUserName><CreateTime>CREATE_TIME</CreateTime><MsgType>music</MsgType><Music><Title>TITLE</Title><Description>DESCRIPTION</Description><MusicUrl>MUSIC_URL</MusicUrl><HQMusicUrl>HQ_MUSIC_Url</HQMusicUrl><ThumbMediaId>MEDIA_ID</ThumbMediaId></Music></xml>";
-
+	@Autowired
+	private AuthUtil authUtil;
 	@PostMapping("/ownerCheck")
 	@ResponseBody
 	public String ownerCheck(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -46,20 +53,76 @@ public class CustomerController {
 				if ("2".equals(content)) {
 					message = imgMessage.replace("TOUSER", fromUserName).replace("FROMUSER", toUserName)
 							.replaceAll("CREATE_TIME", String.valueOf(new Date().getTime()))
-							.replace("MEDIA_ID", "KDx0LTJLZYdlQKxdg5esSc6YXnYsawMtSCRAaHFro6-9ClnkdTUQIplNF_XUBA-7");
+							.replace("MEDIA_ID", "mm0mzY-Hhcjxbrs7OmfobIramqRfodCIPaYU9E48hQ4");
 				}
 				else if ("3".equals(content)) {
 				     ArticlesMessage outputMsg = getBlogMessage(fromUserName, toUserName, new Date().getTime());
 				     message = MessageUtil.messageToXml(outputMsg).replaceAll("com.wechat.bean.ArticlesItem", "item");
-				}else if ("4".equals(content)) {
-					message = musicMessage.replace("TOUSER", fromUserName).replace("FROMUSER", toUserName)
-							.replaceAll("CREATE_TIME", String.valueOf(new Date().getTime()))
-							.replace("FROMUSER", toUserName)
-							.replace("TITLE", "顶天立地 (Live)")
-							.replace("DESCRIPTION", "艾热、周汤豪、王齐铭WatchMe、ICE")
-							.replace("MUSIC_URL", "")
-							.replace("HQ_MUSIC_Url", toUserName)
-							.replace("MEDIA_ID", "KDx0LTJLZYdlQKxdg5esSc6YXnYsawMtSCRAaHFro6-9ClnkdTUQIplNF_XUBA-7");
+				}else if (content.startsWith("音乐")||content.startsWith("歌曲")) {
+					try {
+						NeteaseMusicApi NeteaseMusicApi = new NeteaseMusicApi();
+						List<NeteaseSong> result = (List<NeteaseSong>) NeteaseMusicApi.searchMusicSync(content.substring(2), 1, true);
+						if(result!=null&&result.size()>0) {
+							int index=new Random().nextInt(result.size());
+							NeteaseSong NeteaseSong=result.get(index);
+							System.out.println(NeteaseSong.getName());
+							System.out.println(NeteaseSong.getFormattedArtistsString());
+							System.out.println(NeteaseSong.getPicUrl());
+							System.out.println(NeteaseSong.getMusicLink().getUrl());
+							
+							InputStream input =authUtil.getNetStream(NeteaseSong.getPicUrl()); 
+							String retJson=authUtil.uploadPermanentMaterial(input,"image",null,null,".jpg");
+							System.out.println(retJson);
+							if(!"".equals(retJson)) {
+								String MEDIA_ID=JSONObject.parseObject(retJson).getString("media_id");
+								if(!"".equals(MEDIA_ID)) {
+									message = musicMessage.replace("TOUSER", fromUserName)
+											.replaceAll("CREATE_TIME", String.valueOf(new Date().getTime()))
+											.replace("FROMUSER", toUserName)
+											.replace("TITLE", NeteaseSong.getName())
+											.replace("DESCRIPTION", NeteaseSong.getFormattedArtistsString())
+											.replace("MUSIC_URL", NeteaseSong.getMusicLink().getUrl())
+											.replace("HQ_MUSIC_Url",NeteaseSong.getMusicLink().getUrl())
+											.replace("MEDIA_ID",MEDIA_ID);
+								}
+							}else {
+								TextMessage text = new TextMessage();
+								text.setFromUserName(toUserName);
+								text.setToUserName(fromUserName);
+								text.setMsgType("text");
+
+								// 这里填写回复内容
+								text.setContent("找不到该歌曲");
+
+								text.setCreateTime(new Date().getTime());
+								message = MessageUtil.textMessageToXml(text);
+							}
+						}else {
+							TextMessage text = new TextMessage();
+							text.setFromUserName(toUserName);
+							text.setToUserName(fromUserName);
+							text.setMsgType("text");
+
+							// 这里填写回复内容
+							text.setContent("找不到该歌曲");
+
+							text.setCreateTime(new Date().getTime());
+							message = MessageUtil.textMessageToXml(text);
+						}
+					} catch (Exception e) {
+						TextMessage text = new TextMessage();
+						text.setFromUserName(toUserName);
+						text.setToUserName(fromUserName);
+						text.setMsgType("text");
+
+						// 这里填写回复内容
+						text.setContent("找不到该歌曲");
+
+						text.setCreateTime(new Date().getTime());
+						message = MessageUtil.textMessageToXml(text);
+						e.printStackTrace();
+					}
+					
 				}else {
 					TextMessage text = new TextMessage();
 					text.setFromUserName(toUserName);
@@ -84,7 +147,7 @@ public class CustomerController {
 					contentMsg.append("1  我是文字").append("\n");
 					contentMsg.append("2  我是图片").append("\n");
 					contentMsg.append("3  我是多图文").append("\n");
-					contentMsg.append("4 我是音乐").append("\n");
+					contentMsg.append("搜索歌曲服务：例如音乐海阔天空").append("\n");
 					TextMessage text = new TextMessage();
 					text.setFromUserName(toUserName);
 					text.setToUserName(fromUserName);

@@ -1,8 +1,13 @@
 package com.wechat.utils;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -109,13 +114,112 @@ public class AuthUtil {
 			return template_access_token;
 		} else {
 			String access_token_url = ReqURL.access_token_url;
-			access_token_url = access_token_url.replaceAll("APPID", appConfig.getAppID()).replaceAll("APPSECRET",
-					appConfig.getAppSecret());
+			access_token_url = access_token_url.replaceAll("APPID", "wx90afd5a95cf62c57").replaceAll("APPSECRET",
+					"73071d926b9174529eb433010f1d3586");
 			JSONObject jsonObject = doGetJson(access_token_url);
+			System.out.println(jsonObject.toJSONString());
 			template_access_token = jsonObject.getString("access_token");
 			logger.info("template_access_token=" + template_access_token);
 			RedisUtils.write("template_access_token", template_access_token, 7200);
 			return template_access_token;
 		}
 	}
+	
+	/**
+	 * 上传永久素材
+	 * @param	file
+	 * @param	type
+	 * @param	title type为video时需要,其他类型设null
+	 * @param	introduction type为video时需要,其他类型设null
+	 * @return	{"media_id":MEDIA_ID,"url":URL}
+	 */
+	public  String uploadPermanentMaterial(InputStream input, String type, String title, String introduction, String ext) {
+		
+		String access_token = null;
+		try {
+			access_token = new AuthUtil().doAccessToken();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		String url = "https://api.weixin.qq.com/cgi-bin/material/add_material?access_token="
+				+ access_token + "&type=" + type;
+ 
+		String result = null;
+ 
+		try {
+			URL uploadURL = new URL(url);
+ 
+			HttpURLConnection conn = (HttpURLConnection) uploadURL.openConnection();
+			conn.setConnectTimeout(5000);
+			conn.setReadTimeout(30000);
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			conn.setUseCaches(false);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Connection", "Keep-Alive");
+			conn.setRequestProperty("Cache-Control", "no-cache");
+			String boundary = "-----------------------------" + System.currentTimeMillis();
+			conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+ 
+			OutputStream output = conn.getOutputStream();
+			output.write(("--" + boundary + "\r\n").getBytes());
+			output.write(String.format("Content-Disposition: form-data; name=\"media\"; filename=\"%s\"\r\n",UUID.randomUUID().toString().replaceAll("-", "")+ext).getBytes());
+			output.write("Content-Type: video/mp4 \r\n\r\n".getBytes());
+ 
+			byte[] data = new byte[1024];
+			int len = 0;
+			/* FileInputStream input = new FileInputStream(file); */
+			while ((len = input.read(data)) > -1) {
+				output.write(data, 0, len);
+			}
+ 
+			/*对类型为video的素材进行特殊处理*/
+			if ("video".equals(type)) {
+				output.write(("--" + boundary + "\r\n").getBytes());
+				output.write("Content-Disposition: form-data; name=\"description\";\r\n\r\n".getBytes());
+				output.write(String.format("{\"title\":\"%s\", \"introduction\":\"%s\"}", title, introduction).getBytes());
+			}
+ 
+			output.write(("\r\n--" + boundary + "--\r\n\r\n").getBytes());
+			output.flush();
+			output.close();
+			input.close();
+			
+			InputStream resp = conn.getInputStream();
+ 
+			StringBuffer sb = new StringBuffer();
+ 
+			while ((len = resp.read(data)) > -1)
+				sb.append(new String(data, 0, len, "utf-8"));
+			resp.close();
+			result = sb.toString();
+		} catch (IOException e) {
+			//....
+		}
+		
+		return result;
+	}
+	
+	/**
+     * 获取网络图片流
+     * 
+     * @param url
+     * @return
+     */
+    public InputStream getNetStream(String url) {
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setReadTimeout(5000);
+            connection.setConnectTimeout(5000);
+            connection.setRequestMethod("GET");
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                InputStream inputStream = connection.getInputStream();
+                return inputStream;
+            }
+        } catch (IOException e) {
+            System.out.println("获取网络图片出现异常，图片路径为：" + url);
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

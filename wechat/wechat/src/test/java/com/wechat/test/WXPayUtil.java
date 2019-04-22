@@ -1,4 +1,4 @@
-package com.wechat.wechat;
+package com.wechat.test;
 
 
 import java.io.ByteArrayInputStream;
@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.wechat.wechat.WXPayConstants.SignType;
+import com.wechat.test.WXPayConstants.SignType;
 
 
 public class WXPayUtil {

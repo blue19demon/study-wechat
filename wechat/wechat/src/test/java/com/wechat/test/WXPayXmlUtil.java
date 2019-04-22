@@ -1,4 +1,4 @@
-package com.wechat.wechat;
+package com.wechat.test;
 
 import org.w3c.dom.Document;
 
