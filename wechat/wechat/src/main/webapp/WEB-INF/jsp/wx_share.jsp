@@ -8,11 +8,11 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="http://res2.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 <title>微信分享</title>
 </head>
 <body>
-
+微信分享
 </body>
 <script type="text/javascript">
 	wx.config({
@@ -30,9 +30,9 @@
 				wx
 						.onMenuShareTimeline({
 							title : '计划书', // 分享标题
-							desc : '保险让生活更美好！', // 分享描述
+							desc : '分享描述！', // 分享描述
 							link : '${fenxurl}', // 分享链接
-							imgUrl : '${params.domainAddr}/image/share.jpg', // 分享图标
+							imgUrl : '${params.domainAddr}/img/demo.jpg', // 分享图标
 							success : function() {
 								// 用户确认分享后执行的回调函数
 								alert("您已分享");
@@ -49,9 +49,9 @@
 				wx
 						.onMenuShareAppMessage({
 							title : '计划书', // 分享标题
-							desc : '保险让生活更美好！', // 分享描述
+							desc : '分享描述！', // 分享描述
 							link : '${fenxurl}', // 分享链接
-							imgUrl : '${params.domainAddr}/image/share.jpg', // 分享图标
+							imgUrl : '${params.domainAddr}/img/demo.jpg', // 分享图标
 							type : 'link', // 分享类型,music、video或link，不填默认为link
 							dataUrl : '', // 如果type是music或video，则要提供数据链接，默认为空
 							success : function() {
@@ -69,9 +69,9 @@
 				wx
 						.onMenuShareQQ({
 							title : '计划书', // 分享标题
-							desc : '保险让生活更美好！', // 分享描述
+							desc : '分享描述！', // 分享描述
 							link : '${fenxurl}', // 分享链接
-							imgUrl : '${params.domainAddr}/image/share.jpg', // 分享图标
+							imgUrl : '${params.domainAddr}/img/demo.jpg', // 分享图标
 							success : function() {
 								// 用户确认分享后执行的回调函数
 								alert("您已分享");
@@ -87,9 +87,9 @@
 				wx
 						.onMenuShareWeibo({
 							title : '计划书', // 分享标题
-							desc : '保险让生活更美好！', // 分享描述
+							desc : '分享描述！', // 分享描述
 							link : '${fenxurl}', // 分享链接
-							imgUrl : '${params.domainAddr}/image/share.jpg', // 分享图标
+							imgUrl : '${params.domainAddr}/img/demo.jpg', // 分享图标
 							success : function() {
 								// 用户确认分享后执行的回调函数
 								alert("您已分享");
@@ -105,9 +105,9 @@
 				wx
 						.onMenuShareQZone({
 							title : '计划书', // 分享标题
-							desc : '保险让生活更美好！', // 分享描述
+							desc : '分享描述！', // 分享描述
 							link : '${fenxurl}', // 分享链接
-							imgUrl : '${params.domainAddr}/image/share.jpg', // 分享图标
+							imgUrl : '${params.domainAddr}/img/demo.jpg', // 分享图标
 							success : function() {
 								// 用户确认分享后执行的回调函数
 								alert("您已分享");

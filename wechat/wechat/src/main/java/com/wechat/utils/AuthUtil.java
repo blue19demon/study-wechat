@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.wechat.config.AppConfig;
 import com.wechat.config.ReqURL;
 
@@ -80,29 +81,18 @@ public class AuthUtil {
 
 	@SuppressWarnings({})
 	public Map<String, Object> doGetAccessToken(String code) throws IOException {
-		String access_token = RedisUtils.read("access_token");
-		String openid = RedisUtils.read("openid");
+		String access_token_url = ReqURL.get_access_token;
+		access_token_url = access_token_url.replaceAll("APPID", appConfig.getAppID())
+				.replaceAll("SECRET", appConfig.getAppSecret()).replaceAll("CODE", code);
+		JSONObject jsonObject = doGetJson(access_token_url);
+		String openid = jsonObject.getString("openid");
+		String access_token = jsonObject.getString("access_token");
+		logger.info("openid=" + openid);
+		logger.info("access_token=" + access_token);
 		Map<String, Object> map = new HashMap<>();
-		if (access_token != null && !"".equals(access_token)) {
-			logger.info("从缓存中获取！");
-			map.put("access_token", access_token);
-			map.put("openid", openid);
-			return map;
-		} else {
-			String access_token_url = ReqURL.get_access_token;
-			access_token_url = access_token_url.replaceAll("APPID", appConfig.getAppID())
-					.replaceAll("SECRET", appConfig.getAppSecret()).replaceAll("CODE", code);
-			JSONObject jsonObject = doGetJson(access_token_url);
-			openid = jsonObject.getString("openid");
-			access_token = jsonObject.getString("access_token");
-			logger.info("openid=" + openid);
-			logger.info("access_token=" + access_token);
-			map.put("access_token", access_token);
-			map.put("openid", openid);
-			RedisUtils.write("access_token", access_token, 7200);
-			RedisUtils.write("openid", openid, 7200);
-			return map;
-		}
+		map.put("access_token", access_token);
+		map.put("openid", openid);
+		return map;
 	}
 
 	@SuppressWarnings({})
@@ -114,8 +104,8 @@ public class AuthUtil {
 			return template_access_token;
 		} else {
 			String access_token_url = ReqURL.access_token_url;
-			access_token_url = access_token_url.replaceAll("APPID", "wx90afd5a95cf62c57").replaceAll("APPSECRET",
-					"73071d926b9174529eb433010f1d3586");
+			access_token_url = access_token_url.replaceAll("APPID",appConfig.getAppID()).replaceAll("APPSECRET",
+					appConfig.getAppSecret());
 			JSONObject jsonObject = doGetJson(access_token_url);
 			System.out.println(jsonObject.toJSONString());
 			template_access_token = jsonObject.getString("access_token");

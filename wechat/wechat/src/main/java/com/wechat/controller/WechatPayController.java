@@ -47,12 +47,12 @@ public class WechatPayController{
 		return "weChatPayTest";
     }
     @RequestMapping("wxAuth")
-	public String wxAuth() {
+	public String wxAuth(String scope) {
 		try {
 			String auth_login = ReqURL.get_code;
 			auth_login = auth_login.replaceAll("APPID", appConfig.getAppID())
 					.replaceAll("REDIRECT_URI", URLEncoder.encode(appConfig.getCallback_uri(), "UTF-8"))
-					.replaceAll("SCOPE", "snsapi_userinfo");
+					.replaceAll("SCOPE", scope);
 			logger.info("auth_login="+auth_login);
 			return "redirect:" + auth_login;
 		} catch (Exception e) {

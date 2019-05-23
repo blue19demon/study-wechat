@@ -26,12 +26,6 @@ $(function(){
         		});
           }
       });
-	    var title='骑行宝';
-		var desc='骑行宝来了';
-		var shareUrl='http://cpjb82.natappfree.cc/fenxiang.do';
-		var imgUrl='http://cpjb82.natappfree.cc/img/demo.jpg';
-		
-		doShare(title,desc,shareUrl,imgUrl);
 });
 
 //step2 微信js-sdk分享功能
@@ -82,6 +76,20 @@ function doShare(title,desc,shareUrl,imgUrl){
 								},
 								fail: function (res) {
 			                        alert(JSON.stringify(res));
+			                    },
+			                    trigger: function (res) {
+			                    	 $.ajax({
+			                             type: "POST",
+			                             url: "/wxTrigger",
+			                             data: {
+			                            	 'url':window.location.href
+			                             },
+			                             success: function(data){
+			                            	 var url=data.url;
+			                            	 alert(url);
+			                            	 shareUrl=url;
+			                              }
+			                          });
 			                    }
 							});
 					wx

@@ -20,7 +20,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.wechat.bean.ArticlesItem;
 import com.wechat.bean.ArticlesMessage;
 import com.wechat.bean.TextMessage;
-import com.wechat.music.provider.netease.NeteaseMusicApi;
+import com.wechat.music.api.MusicApi;
+import com.wechat.music.api.MusicApiFactory;
+import com.wechat.music.api.MusicProvider;
 import com.wechat.music.provider.netease.NeteaseSong;
 import com.wechat.utils.AuthUtil;
 import com.wechat.utils.MessageUtil;
@@ -60,8 +62,9 @@ public class CustomerController {
 				     message = MessageUtil.messageToXml(outputMsg).replaceAll("com.wechat.bean.ArticlesItem", "item");
 				}else if (content.startsWith("音乐")||content.startsWith("歌曲")) {
 					try {
-						NeteaseMusicApi NeteaseMusicApi = new NeteaseMusicApi();
-						List<NeteaseSong> result = (List<NeteaseSong>) NeteaseMusicApi.searchMusicSync(content.substring(2), 1, true);
+						MusicApi NeteaseMusicApi = MusicApiFactory.create(MusicProvider.Netease);
+						@SuppressWarnings("unchecked")
+						List<NeteaseSong> result = (List<NeteaseSong>) NeteaseMusicApi.searchMusicSync(content.substring(2), 0, true);
 						if(result!=null&&result.size()>0) {
 							int index=new Random().nextInt(result.size());
 							NeteaseSong NeteaseSong=result.get(index);

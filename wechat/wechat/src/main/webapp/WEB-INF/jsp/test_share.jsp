@@ -9,10 +9,10 @@
 	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<title>微信分享测试</title>
+<title>微信分享[跳转百度连接，使用外部图片]</title>
 </head>
 <body>
-  <h1><a href="wxShreTest2">跳转page2</a></h1>
+  <h1><a href="wxShreTest2">跳转page2,id=${id }</a></h1>
 </body>
 <script type="text/javascript" src="js/jquery-2.0.0.min.js"></script>
 <!-- 引入微信的js-sdk文件 -->
@@ -20,12 +20,13 @@
 <script type="text/javascript" src="js/wechat_share.js"></script>
 <script type="text/javascript">
 $(function(){
-	    /* var title='分享标题222';
-		var desc='分享描述222';
-		var shareUrl='http://cpjb82.natappfree.cc/fenxiang.do'; 
-		var imgUrl='http://cpjb82.natappfree.cc/img/demo.jpg';
-		
-		doShare(title,desc,shareUrl,imgUrl); */
+	   var title='微信分享测试 1';
+		var desc='微信分享测试 11';
+		//var shareUrl='http://wwww.baidu.com';
+		var shareUrl='${domainAddr}/wxShreTest2?id=${id }';
+		var imgUrl='http://img.zcool.cn/community/019e4d57e7e66e0000012e7e6643d9.jpg@1280w_1l_2o_100sh.jpg';
+		//var imgUrl='${domainAddr}/img/demo.jpg';
+		doShare(title,desc,shareUrl,imgUrl);
 });
 </script>
 </html>

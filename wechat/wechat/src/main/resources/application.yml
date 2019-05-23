@@ -4,8 +4,5 @@ spring:
       view:
         suffix: .jsp
         prefix: /WEB-INF/jsp/
-      thymeleaf:
-        cache: false
-        enabled: false
   resources:
-      static-locations: classpath:/WEB-INF/resources
+      static-locations: classpath:/WEB-INF/resources/

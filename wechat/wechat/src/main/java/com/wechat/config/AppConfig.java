@@ -4,16 +4,18 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AppConfig {
-	// 应用ID,您的APPID
-	private String AppID = "wx90afd5a95cf62c57";
+	// 应用ID,您的APPID  主账 wx90afd5a95cf62c57 测试账户wx0985b6dbaeeff28c
+	private String AppID = "wx0985b6dbaeeff28c";
 	// AppSecret
-	private String AppSecret = "73071d926b9174529eb433010f1d3586";
+	//主账 acad3724efc8a745fe42b0b9554530f6 
+	//测试账户 d3ba2d045ffc578abd0e9d23f8c93404
+	private String AppSecret = "d3ba2d045ffc578abd0e9d23f8c93404";
 	// Token
 	private String Token = "imook";
 	// host
-	private String host = "http://x3kw28.natappfree.cc";
+	private String host = "http://uuvit2.natappfree.cc";
 	// callback_uri
-	private String callback_uri = host+"/unifiedOrder";
+	private String callback_uri = host+"/wxAuthallBack";
 	// EncodingAESKey
 	private String EncodingAESKey = "pAmEKBy2mIJpYfZRenV3A3qclVi50CsOHVv2hGCC9bd";
 

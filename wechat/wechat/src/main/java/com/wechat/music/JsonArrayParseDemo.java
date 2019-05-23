@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.ToStringExclude;
+
 /**
  * Created by haohua on 2018/2/8.
  */
@@ -92,6 +94,7 @@ public class JsonArrayParseDemo {
         return result;
     }
 
+   
     static class TestSong {
         @SuppressWarnings("unused")
         @JSONField(name = "song_name")
@@ -99,5 +102,11 @@ public class JsonArrayParseDemo {
 
         @SuppressWarnings("unused")
         public transient String trans;
+
+		@Override
+		public String toString() {
+			return "TestSong [songName=" + songName + "]";
+		}
+        
     }
 }

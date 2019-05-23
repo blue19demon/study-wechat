@@ -12,10 +12,20 @@
 <title>微信分享测试page2</title>
 </head>
 <body>
-  <h1><a href="wxShreTest3">跳转page3</a></h1>
+  <h1><a href="wxShreTest3">跳转page3,id=${id }</a></h1>
 </body>
 <script type="text/javascript" src="js/jquery-2.0.0.min.js"></script>
 <!-- 引入微信的js-sdk文件 -->
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript" src="js/wechat_share.js"></script>
+<script type="text/javascript">
+$(function(){
+	   var title='微信分享测试 2';
+		var desc='微信分享测试22';
+		var shareUrl='${domainAddr}/wxShreTest3?id=${id }';
+		var imgUrl='${domainAddr}/img/demo.jpg';
+		
+		doShare(title,desc,shareUrl,imgUrl);
+});
+</script>
 </html>

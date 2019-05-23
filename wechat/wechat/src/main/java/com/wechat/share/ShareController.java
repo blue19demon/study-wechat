@@ -2,6 +2,7 @@ package com.wechat.share;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -47,18 +47,36 @@ public class ShareController {
         return params;
     }
     
+    @RequestMapping("wxTrigger")
+    @ResponseBody
+    public Map<String, String> wxTrigger(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("url", request.getParameter("url"));
+        logger.info("wxTrigger=" + JSONObject.toJSONString(map));
+        return map;
+    }
+    
     @RequestMapping("wxShreTest")
-    public String wxShreTest() {
+    public String wxShreTest(HttpServletRequest request) {
+    	String domainAddr = appConfig.getHost();
+    	request.setAttribute("domainAddr", domainAddr);
+    	request.setAttribute("id", UUID.randomUUID().toString());
         return "test_share";
     }
     
     @RequestMapping("wxShreTest2")
-    public String wxShreTest2() {
+    public String wxShreTest2(HttpServletRequest request) {
+    	String domainAddr = appConfig.getHost();
+    	request.setAttribute("domainAddr", domainAddr);
+    	request.setAttribute("id", request.getParameter("id"));
         return "test_share2";
     }
     
     @RequestMapping("wxShreTest3")
-    public String wxShreTest3() {
+    public String wxShreTest3(HttpServletRequest request) {
+    	String domainAddr = appConfig.getHost();
+    	request.setAttribute("domainAddr", domainAddr);
+    	request.setAttribute("id", request.getParameter("id"));
         return "test_share3";
     }
 }

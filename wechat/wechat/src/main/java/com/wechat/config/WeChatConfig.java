@@ -11,7 +11,7 @@ public class WeChatConfig {
     public static final String MCH_ID = "1512382871";
  
     /**微信支付API秘钥*/
-    public static final String KEY = "bbfe124b99377409d104994f91e56bb1";//"Qixingbaoduoduozhuanqian85910855";
+    public static final String KEY = "577b4caef339121384314f827350cf5c";//"Qixingbaoduoduozhuanqian85910855";
  
     /**微信支付api证书路径*/
     public static final String CERT_PATH = "***/apiclient_cert.p12";

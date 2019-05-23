@@ -11,6 +11,9 @@ public class DnsHelper {
 
     private static final String DNS = "158.69.209.100";
 
+    public static void main(String[] args) {
+		testResolve();
+	}
     @SuppressWarnings("unused")
     public static void testResolve() {
         try {

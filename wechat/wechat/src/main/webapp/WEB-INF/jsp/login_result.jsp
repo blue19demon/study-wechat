@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
 <title>微信授权登录结果</title>
+
 </head>
 <body>
 country:${authResult.country }<br>
@@ -18,4 +19,5 @@ nickname:${authResult.nickname }<br>
 headimgurl:<img alt="" src="${authResult.headimgurl }" style="width: 100px;height: 100px"><br>
 language:${authResult.language }<br>
 </body>
+
 </html>

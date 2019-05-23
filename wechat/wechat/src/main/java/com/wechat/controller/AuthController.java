@@ -1,7 +1,6 @@
 package com.wechat.controller;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wechat.bean.AuthResult;
-import com.wechat.config.AppConfig;
 import com.wechat.config.ReqURL;
 import com.wechat.utils.AuthUtil;
 import com.wechat.utils.CheckoutUtil;
@@ -92,6 +90,8 @@ public class AuthController {
 			String token=(String) doGetAccessToken.get("access_token");
 			String openid=(String) doGetAccessToken.get("openid");
 			String user_info = ReqURL.get_user_info;
+			System.out.println(token);
+			System.out.println(openid);
 			user_info = user_info.replaceAll("ACCESS_TOKEN", token).replaceAll("OPENID", openid);
 			JSONObject userInfo = authUtil.doGetJson(user_info);
 			/**
