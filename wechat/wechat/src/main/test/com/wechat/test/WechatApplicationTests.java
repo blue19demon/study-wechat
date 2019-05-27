@@ -3,21 +3,14 @@ package com.wechat.test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.UUID;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.wechat.utils.AuthUtil;
-@RunWith(SpringRunner.class)
-@SpringBootTest
+
+/*@RunWith(SpringRunner.class)
+@SpringBootTest*/
 public class WechatApplicationTests {
 
 	@Test

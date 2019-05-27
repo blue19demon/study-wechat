@@ -1,6 +1,6 @@
 package com.wechat.config;
 
-public class WeChatConstant {
+public class WechatConstant {
     /**Token*/
     public static final String TOKEN = "";
     /**EncodingAESKey*/
@@ -37,8 +37,5 @@ public class WeChatConstant {
     public static final String ACCESS_TOKEN_ENAME = "access_token";
     /**返回成功字符串*/
     public static final String RETURN_SUCCESS = "SUCCESS";
-    /**主动发送消息url*/
-    public static final String SEND_MESSAGE_URL = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=";
-    /**通过code获取授权access_token的URL*/
-    public static final String GET_AUTHTOKEN_URL = " https://api.weixin.qq.com/sns/oauth2/access_token?";
+   
 }

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-<title>微信授权登录</title>
+<title>微信授权登录& 禁用微信分享按钮</title>
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript" src="js/jquery-2.0.0.min.js"></script>
 <!-- 禁用微信分享按钮 1,解决了一个坑：IOS页面回退后再次出现分享按钮 -->
@@ -25,11 +25,6 @@
     	    }  
     	}); 
 
-
-    	window.onvisibilitychange= function(e){
-           alert(1);
-        };
-    	
        function onBridgeReady() {
             WeixinJSBridge.call('hideOptionMenu');
         }
@@ -49,26 +44,6 @@
         	WeixinJSBridge.invoke('closeWindow', {}, function (res) { alert(1)});
          }
     </script>
-   <!-- 
-    <script>
-	   function onBridgeReady() {
-		   wx.hideMenuItems({
-		        menuList: ["menuItem:share:timeline", "menuItem:copyUrl", "menuItem:share:appMessage", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:favorite", "menuItem:share:facebook", "menuItem:share:QZone", "menuItem:editTag", "menuItem:delete", "menuItem:copyUrl", "menuItem:originPage", "menuItem:readMode", "menuItem:openWithQQBrowser", "menuItem:openWithSafari", "menuItem:share:email", "menuItem:share:brand"] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮
-		    });
-       }
-
-       if (typeof WeixinJSBridge == "undefined") {
-           if (document.addEventListener) {
-               document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-           } else if (document.attachEvent) {
-               document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-               document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-           }
-       } else {
-           onBridgeReady();
-       }
-	  
-    </script> -->
 </head>
 <body>
 <a href="wxAuth?scope=snsapi_base" >微信授权登录[静默]</a><br/>

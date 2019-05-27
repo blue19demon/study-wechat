@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
-import com.wechat.config.AppConfig;
+import com.wechat.config.WechatParamConfig;
 import com.wechat.servcie.WeixinService;
 
 /**
@@ -24,12 +24,12 @@ import com.wechat.servcie.WeixinService;
  *
  */
 @Controller
-public class WechaXtShareController {
+public class WechaShareV1Controller {
 	@Autowired
-	private AppConfig appConfig;
+	private WechatParamConfig appConfig;
 	@Autowired
 	private WeixinService weixinService;
-	private final static Logger logger = LoggerFactory.getLogger(WechaXtShareController.class);
+	private final static Logger logger = LoggerFactory.getLogger(WechaShareV1Controller.class);
 
 	@RequestMapping("cover")
 	public String identifyCover(HttpServletRequest request, HttpServletResponse response) {

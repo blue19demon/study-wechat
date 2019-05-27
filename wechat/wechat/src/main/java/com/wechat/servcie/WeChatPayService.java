@@ -9,7 +9,7 @@ import java.util.TreeMap;
 
 import com.wechat.bean.Order;
 import com.wechat.bean.WxPaySendData;
-import com.wechat.config.WeChatConfig;
+import com.wechat.config.PayConfig;
 import com.wechat.utils.StringUtils;
 import com.wechat.utils.WeChatUtils;
 
@@ -22,20 +22,20 @@ public class WeChatPayService {
 	    try {
 	            WxPaySendData paySendData = new WxPaySendData();
 	            //构建微信支付请求参数集合
-	            paySendData.setAppId(WeChatConfig.APP_ID);
+	            paySendData.setAppId(PayConfig.APP_ID);
 	            paySendData.setAttach("微信订单支付:"+order.getOrderNumber());
 	            paySendData.setBody("商品描述");
-	            paySendData.setMchId(WeChatConfig.MCH_ID);
+	            paySendData.setMchId(PayConfig.MCH_ID);
 	            paySendData.setNonceStr(WeChatUtils.getRandomStr(32));
-	            paySendData.setNotifyUrl(WeChatConfig.NOTIFY_URL);
+	            paySendData.setNotifyUrl(PayConfig.NOTIFY_URL);
 	            paySendData.setDeviceInfo("sandbox");//沙箱环境
 	            //paySendData.setDeviceInfo("WEB");//真实环境
 	            paySendData.setOutTradeNo(order.getOrderNumber());
 	            paySendData.setTotalFee(179);
 	           if("1".equals(type)) {
-	        	   paySendData.setTradeType(WeChatConfig.TRADE_TYPE_JSAPI);
+	        	   paySendData.setTradeType(PayConfig.TRADE_TYPE_JSAPI);
 	           }else {
-	        	   paySendData.setTradeType(WeChatConfig.TRADE_TYPE_NATIVE);
+	        	   paySendData.setTradeType(PayConfig.TRADE_TYPE_NATIVE);
 	           }
 	            paySendData.setSpBillCreateIp((String) map.get("remoteIp"));
 	            paySendData.setOpenId((String) map.get("openId"));
@@ -46,7 +46,7 @@ public class WeChatPayService {
 	            String reqXml = WeChatUtils.sendDataToXml(paySendData);
 	            //发送请求
 	            byte[] xmlData = reqXml.getBytes();
-	            URL url = new URL(WeChatConfig.UNIFIED_ORDER_URL);
+	            URL url = new URL(PayConfig.UNIFIED_ORDER_URL);
 	            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 	            urlConnection.setDoOutput(true);
 	            urlConnection.setDoInput(true);

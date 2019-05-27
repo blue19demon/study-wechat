@@ -1,6 +1,6 @@
 package com.wechat.config;
 
-public class WeChatConfig {
+public class PayConfig {
 	 /**公众号AppId*/
     public static final String APP_ID = "wx4492fde581248a1d";    
  

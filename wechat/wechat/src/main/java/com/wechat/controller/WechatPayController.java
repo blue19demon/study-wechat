@@ -1,7 +1,6 @@
 package com.wechat.controller;
 
 import java.io.InputStream;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
@@ -20,10 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.wechat.bean.Order;
-import com.wechat.config.AppConfig;
-import com.wechat.config.ReqURL;
-import com.wechat.config.WeChatConfig;
-import com.wechat.config.WeChatConstant;
+import com.wechat.config.PayConfig;
+import com.wechat.config.WechatConstant;
 import com.wechat.servcie.OrderService;
 import com.wechat.servcie.WeChatPayService;
 import com.wechat.utils.GenerateQrCodeUtil;
@@ -40,26 +37,12 @@ public class WechatPayController{
 
     @Autowired
     private OrderService orderService;
-    @Autowired
-	private AppConfig appConfig;
+
     @RequestMapping(value = "weChatPayTest")
     public String weChatPayTest(HttpServletRequest request,Model model){
 		return "weChatPayTest";
     }
-    @RequestMapping("wxAuth")
-	public String wxAuth(String scope) {
-		try {
-			String auth_login = ReqURL.get_code;
-			auth_login = auth_login.replaceAll("APPID", appConfig.getAppID())
-					.replaceAll("REDIRECT_URI", URLEncoder.encode(appConfig.getCallback_uri(), "UTF-8"))
-					.replaceAll("SCOPE", scope);
-			logger.info("auth_login="+auth_login);
-			return "redirect:" + auth_login;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "";
-	}
+    
     @RequestMapping(value = "unifiedOrder")
     public String unifiedOrder(HttpServletRequest request,Model model) throws Exception{
         //用户同意授权，获得的code
@@ -81,7 +64,7 @@ public class WechatPayController{
         String returnCode = (String) resultMap.get("return_code");//通信标识
         String resultCode = (String) resultMap.get("result_code");//交易标识
         //只有当returnCode与resultCode均返回“success”，才代表微信支付统一下单成功
-        if (WeChatConstant.RETURN_SUCCESS.equals(resultCode)&&WeChatConstant.RETURN_SUCCESS.equals(returnCode)){
+        if (WechatConstant.RETURN_SUCCESS.equals(resultCode)&&WechatConstant.RETURN_SUCCESS.equals(returnCode)){
             logger.info("微信统一下单成功:"+JSONObject.toJSONString(resultMap));
         	if("1".equals(type)) {
             	String appId = (String) resultMap.get("appid");//微信公众号AppId
@@ -142,7 +125,7 @@ public class WechatPayController{
 			InputStream inStream = request.getInputStream();
 			if (inStream != null) {
 				Map<String, String> resultMap = WeChatUtils.parseXml(inStream);
-				if(WeChatUtils.isTenpaySign(resultMap, WeChatConfig.KEY)) {
+				if(WeChatUtils.isTenpaySign(resultMap, PayConfig.KEY)) {
 					logger.info("验证签名通过！");
 					logger.info("====resultMap===="+JSONObject.toJSONString(resultMap));
 					if (resultMap.get("result_code").equals("SUCCESS")) {

@@ -1,4 +1,4 @@
-package com.wechat.share;
+package com.wechat.servcie;
 
 import java.io.IOException;
 import java.util.Date;
@@ -29,8 +29,8 @@ import com.wechat.utils.Sha1;
 
 import redis.clients.jedis.Jedis;
 @Service
-public class WechatAuthService {
-    private final static Logger logger = LoggerFactory.getLogger(WechatAuthService.class);
+public class WechatShareService {
+    private final static Logger logger = LoggerFactory.getLogger(WechatShareService.class);
 
 	 @SuppressWarnings({ "resource" })
 	    public JSONObject doGetJson(String url) throws IOException {

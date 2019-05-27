@@ -37,8 +37,8 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 import com.wechat.bean.AuthToken;
 import com.wechat.bean.WxPaySendData;
-import com.wechat.config.WeChatConfig;
-import com.wechat.config.WeChatConstant;
+import com.wechat.config.PayConfig;
+import com.wechat.config.WechatAPIURL;
 public class WeChatUtils {
 	 
     /**
@@ -49,7 +49,7 @@ public class WeChatUtils {
         AuthToken authToken;
         StringBuilder json = new StringBuilder();
         try {
-            URL url = new URL(WeChatConstant.GET_AUTHTOKEN_URL+"appid="+ WeChatConfig.APP_ID+"&secret="+ WeChatConfig.APP_SECRET+"&code="+code+"&grant_type=authorization_code");
+            URL url = new URL(WechatAPIURL.GET_AUTHTOKEN_URL+"appid="+ PayConfig.APP_ID+"&secret="+ PayConfig.APP_SECRET+"&code="+code+"&grant_type=authorization_code");
             URLConnection uc = url.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
             String inputLine ;
@@ -84,7 +84,7 @@ public class WeChatUtils {
                 sb.append(k + "=" + v + "&");
             }
         }
-        sb.append("key=" + WeChatConfig.KEY);
+        sb.append("key=" + PayConfig.KEY);
         String sign = MD5Util.MD5Encode(sb.toString(),"UTF-8").toUpperCase();
         return sign;
     }

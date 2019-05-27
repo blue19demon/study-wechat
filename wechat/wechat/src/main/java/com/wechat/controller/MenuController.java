@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
-import com.wechat.config.ReqURL;
+import com.wechat.config.WechatAPIURL;
 import com.wechat.utils.AuthUtil;
 /**
  * 自定义菜单
@@ -31,7 +31,7 @@ public class MenuController {
 		JSONObject create_menu_result = null;
 		try {
 			String access_token = authUtil.doAccessToken();
-			String create_menu_url = ReqURL.create_menu;
+			String create_menu_url = WechatAPIURL.create_menu;
 			create_menu_url = create_menu_url.replaceAll("ACCESS_TOKEN", access_token);
 			String dataSend="{\r\n" + 
 					"    \"button\": [\r\n" + 
@@ -100,7 +100,7 @@ public class MenuController {
 		JSONObject delete_menu_result = null;
 		try {
 			String access_token = authUtil.doAccessToken();
-			String delete_menu_url = ReqURL.delete_menu;
+			String delete_menu_url = WechatAPIURL.delete_menu;
 			delete_menu_url = delete_menu_url.replaceAll("ACCESS_TOKEN", access_token);
 			String dataSend="";
 			logger.info(dataSend);
@@ -121,7 +121,7 @@ public class MenuController {
 		JSONObject delete_menu_result = null;
 		try {
 			String access_token = authUtil.doAccessToken();
-			String addconditional_menu_url = ReqURL.addconditional_menu;
+			String addconditional_menu_url = WechatAPIURL.addconditional_menu;
 			addconditional_menu_url = addconditional_menu_url.replaceAll("ACCESS_TOKEN", access_token);
 			String dataSend="{\r\n" + 
 					"     \"button\":[\r\n" + 

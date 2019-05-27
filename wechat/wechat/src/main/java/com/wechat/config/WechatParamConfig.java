@@ -3,7 +3,7 @@ package com.wechat.config;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AppConfig {
+public class WechatParamConfig {
 	// 应用ID,您的APPID  主账 wx90afd5a95cf62c57 测试账户wx0985b6dbaeeff28c
 	private String AppID = "wx0985b6dbaeeff28c";
 	// AppSecret
@@ -13,7 +13,7 @@ public class AppConfig {
 	// Token
 	private String Token = "imook";
 	// host
-	private String host = "http://uuvit2.natappfree.cc";
+	private String host = "http://iddda4.natappfree.cc";
 	// callback_uri
 	private String callback_uri = host+"/wxAuthallBack";
 	// EncodingAESKey

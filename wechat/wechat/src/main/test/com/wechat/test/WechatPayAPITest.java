@@ -14,7 +14,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.wechat.config.WeChatConfig;
+import com.wechat.config.PayConfig;
 import com.wechat.utils.WeChatUtils;
 
 /**
@@ -22,7 +22,7 @@ import com.wechat.utils.WeChatUtils;
  * @author Administrator
  *
  */
-public class WechatAPITest {
+public class WechatPayAPITest {
 	
 	public static void main(String[] args) {
 		getsignkey();
@@ -32,7 +32,7 @@ public class WechatAPITest {
 		try {
 			// 微信下载资金账单，商户可以通过该接口下载自2017年6月1日起 的历史资金流水账单。
 			Map<String, String> param1 = new HashMap<String, String>();
-			param1.put("mch_id", WeChatConfig.MCH_ID);// 商户号
+			param1.put("mch_id", PayConfig.MCH_ID);// 商户号
 			param1.put("nonce_str", WXPayUtil.generateNonceStr());// 随机字符串
 			param1.put("bill_date", "20180824");// 下载对账单的日期，格式：20141110
 			/**
@@ -43,7 +43,7 @@ public class WechatAPITest {
 			 */
 			param1.put("account_type", "Basic");
 			param1.put("tar_type", "GZIP");// 压缩账单,非必传参数，固定值：GZIP，返回格式为.gzip的压缩包账单。不传则默认为数据流形式
-			param1.put("sign", WXPayUtil.generateSignature(param1,WeChatConfig.KEY,
+			param1.put("sign", WXPayUtil.generateSignature(param1,PayConfig.KEY,
 					WXPayConstants.SignType.MD5));// 沙盒测试貌似只支持MD5加密
 			
 			String xml = "";
@@ -52,7 +52,7 @@ public class WechatAPITest {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			String obj = doPOSTJson(WeChatConfig.DOWNLOAD_FUNDFLOW_URL, xml);
+			String obj = doPOSTJson(PayConfig.DOWNLOAD_FUNDFLOW_URL, xml);
 			String fileName="downloadfundflow_"+param1.get("bill_date");
 			logResult(obj,fileName);
 		} catch (IOException e) {
@@ -66,7 +66,7 @@ public class WechatAPITest {
 		try {
 			// 微信下载对账单
 			Map<String, String> param1 = new HashMap<String, String>();
-			param1.put("mch_id", WeChatConfig.MCH_ID);// 商户号
+			param1.put("mch_id", PayConfig.MCH_ID);// 商户号
 			param1.put("nonce_str", WXPayUtil.generateNonceStr());// 随机字符串
 			param1.put("bill_date", "20180824");// 下载对账单的日期，格式：20141110
 			/**
@@ -80,7 +80,7 @@ public class WechatAPITest {
 			 */
 			param1.put("bill_type", "ALL");
 			param1.put("tar_type", "GZIP");// 压缩账单,非必传参数，固定值：GZIP，返回格式为.gzip的压缩包账单。不传则默认为数据流形式
-			param1.put("sign", WXPayUtil.generateSignature(param1,WeChatConfig.KEY,
+			param1.put("sign", WXPayUtil.generateSignature(param1,PayConfig.KEY,
 					WXPayConstants.SignType.MD5));// 沙盒测试貌似只支持MD5加密
 			
 			String xml = "";
@@ -89,7 +89,7 @@ public class WechatAPITest {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			String obj = doPOSTJson(WeChatConfig.DOWNLOAD_BILL_URL, xml);
+			String obj = doPOSTJson(PayConfig.DOWNLOAD_BILL_URL, xml);
 			String fileName="downloadbill_"+param1.get("bill_date");
 			logResult(obj,fileName);
 		} catch (IOException e) {
@@ -122,13 +122,13 @@ public class WechatAPITest {
 		try {
 			// 微信查询退款
 			Map<String, String> param1 = new HashMap<String, String>();
-			param1.put("mch_id", WeChatConfig.MCH_ID);// 商户号
+			param1.put("mch_id", PayConfig.MCH_ID);// 商户号
 			param1.put("nonce_str", WXPayUtil.generateNonceStr());// 随机字符串
 			param1.put("out_refund_no", "1535163255343");// 商户系统内部的退款单号，四选一
 			param1.put("out_trade_no", "1535163403513");// 商户订单号，四选一
 			param1.put("transaction_id", "4704663554020180825101041114954");// 微信订单号，四选一
 			param1.put("refund_id", "4214278378220180825110451696");// 微信生成的退款单号，在申请退款接口返回，四选一
-			param1.put("sign", WXPayUtil.generateSignature(param1,WeChatConfig.KEY,
+			param1.put("sign", WXPayUtil.generateSignature(param1,PayConfig.KEY,
 					WXPayConstants.SignType.MD5));// 沙盒测试貌似只支持MD5加密
 			
 			String xml = "";
@@ -137,10 +137,10 @@ public class WechatAPITest {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			String obj = doPOSTJson(WeChatConfig.REFUND_QUERY_URL, xml);
+			String obj = doPOSTJson(PayConfig.REFUND_QUERY_URL, xml);
 			System.out.println(obj);
 			Map<String, String> res = WXPayUtil.xmlToMap(obj);
-			if(WeChatUtils.isTenpaySign(res, WeChatConfig.KEY)) {
+			if(WeChatUtils.isTenpaySign(res, PayConfig.KEY)) {
 				System.out.println("验证签名通过！");
 				/**
 				 * {
@@ -172,16 +172,16 @@ public class WechatAPITest {
 		try {
 			// 微信申请退款
 			Map<String, String> param1 = new HashMap<String, String>();
-			param1.put("mch_id", WeChatConfig.MCH_ID);// 商户号
+			param1.put("mch_id", PayConfig.MCH_ID);// 商户号
 			param1.put("nonce_str", WXPayUtil.generateNonceStr());// 随机字符串
 			param1.put("out_refund_no", "1535163255343");// 商户系统内部的退款单号，商户系统内部唯一，只能是数字、大小写字母_-|*@ ，同一退款单号多次请求只退一笔。
 			param1.put("out_trade_no", "1535163403513");// 商户订单号
 			param1.put("refund_fee", "551");// 退款金额，沙箱环境只能写这个金额
 			param1.put("total_fee", "552");// 订单金额，沙箱环境只能写这个金额
 			param1.put("transaction_id", "4704663554020180825101041114954");// 微信订单号
-			param1.put("notify_url", WeChatConfig.REFUND_NOTIFY_URL);// 退款结果通知url,可选,异步接收微信支付退款结果通知的回调地址，通知URL必须为外网可访问的url，不允许带参数
+			param1.put("notify_url", PayConfig.REFUND_NOTIFY_URL);// 退款结果通知url,可选,异步接收微信支付退款结果通知的回调地址，通知URL必须为外网可访问的url，不允许带参数
             //如果参数中传了notify_url，则商户平台上配置的回调地址将不会生效。
-			param1.put("sign", WXPayUtil.generateSignature(param1,WeChatConfig.KEY,
+			param1.put("sign", WXPayUtil.generateSignature(param1,PayConfig.KEY,
 					WXPayConstants.SignType.MD5));// 沙盒测试貌似只支持MD5加密
 			
 			String xml = "";
@@ -190,10 +190,10 @@ public class WechatAPITest {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			String obj = doPOSTJson(WeChatConfig.REFUND_URL, xml);
+			String obj = doPOSTJson(PayConfig.REFUND_URL, xml);
 			System.out.println(obj);
 			Map<String, String> res = WXPayUtil.xmlToMap(obj);
-			if(WeChatUtils.isTenpaySign(res, WeChatConfig.KEY)) {
+			if(WeChatUtils.isTenpaySign(res, PayConfig.KEY)) {
 				System.out.println("验证签名通过！");
 				/**
 				 * {
@@ -247,10 +247,10 @@ public class WechatAPITest {
 		try {
 			// 微信关闭订单
 			Map<String, String> param1 = new HashMap<String, String>();
-			param1.put("mch_id", WeChatConfig.MCH_ID);// 商户号
+			param1.put("mch_id", PayConfig.MCH_ID);// 商户号
 			param1.put("nonce_str", WXPayUtil.generateNonceStr());// 随机字符串
 			param1.put("out_trade_no", "1535163403513");// 商户订单号,商户订单号
-			param1.put("sign", WXPayUtil.generateSignature(param1,WeChatConfig.KEY,
+			param1.put("sign", WXPayUtil.generateSignature(param1,PayConfig.KEY,
 					WXPayConstants.SignType.MD5));// 沙盒测试貌似只支持MD5加密
 			
 			String xml = "";
@@ -259,9 +259,9 @@ public class WechatAPITest {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			String obj = doPOSTJson(WeChatConfig.CLOSE_ORDER_URL, xml);
+			String obj = doPOSTJson(PayConfig.CLOSE_ORDER_URL, xml);
 			Map<String, String> res = WXPayUtil.xmlToMap(obj);
-			if(WeChatUtils.isTenpaySign(res, WeChatConfig.KEY)) {
+			if(WeChatUtils.isTenpaySign(res, PayConfig.KEY)) {
 				System.out.println("验证签名通过！");
 				/**
 				 * {
@@ -293,11 +293,11 @@ public class WechatAPITest {
 		try {
 			// 查询订单
 			Map<String, String> param1 = new HashMap<String, String>();
-			param1.put("mch_id", WeChatConfig.MCH_ID);// 商户号
+			param1.put("mch_id", PayConfig.MCH_ID);// 商户号
 			param1.put("nonce_str", WXPayUtil.generateNonceStr());// 随机字符串
 			param1.put("transaction_id", "4205311962120180825101309928384");//微信的订单号，建议优先使用
 			param1.put("out_trade_no", "1535163403513");// 商户订单号,商户订单号
-			param1.put("sign", WXPayUtil.generateSignature(param1,WeChatConfig.KEY,
+			param1.put("sign", WXPayUtil.generateSignature(param1,PayConfig.KEY,
 					WXPayConstants.SignType.MD5));// 沙盒测试貌似只支持MD5加密
 			String xml = "";
 			try {
@@ -305,9 +305,9 @@ public class WechatAPITest {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			String obj = doPOSTJson(WeChatConfig.ORDER_QUERY_URL, xml);
+			String obj = doPOSTJson(PayConfig.ORDER_QUERY_URL, xml);
 			Map<String, String> res = WXPayUtil.xmlToMap(obj);
-			if(WeChatUtils.isTenpaySign(res, WeChatConfig.KEY)) {
+			if(WeChatUtils.isTenpaySign(res, PayConfig.KEY)) {
 				System.out.println("验证签名通过！");
 				/**
 				 * {
@@ -339,7 +339,7 @@ public class WechatAPITest {
 		try {
 			// 获取sandbox_signkey
 			Map<String, String> param1 = new HashMap<String, String>();
-			param1.put("mch_id", WeChatConfig.MCH_ID);// 商户号
+			param1.put("mch_id", PayConfig.MCH_ID);// 商户号
 			param1.put("nonce_str", WXPayUtil.generateNonceStr());// 随机字符串
 			param1.put("sign", WXPayUtil.generateSignature(param1, "Qixingbaoduoduozhuanqian85910855",
 					WXPayConstants.SignType.MD5));// 沙盒测试貌似只支持MD5加密，申请的时候使用真实API秘钥
@@ -349,7 +349,7 @@ public class WechatAPITest {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			String obj = doPOSTJson(WeChatConfig.GET_SIGNKEY_URL, xml);
+			String obj = doPOSTJson(PayConfig.GET_SIGNKEY_URL, xml);
 			Map<String, String> res = WXPayUtil.xmlToMap(obj);
 			System.out.println(JSONObject.toJSONString(res));
 		} catch (IOException e) {
