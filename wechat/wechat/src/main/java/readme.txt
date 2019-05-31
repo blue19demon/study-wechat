@@ -1,1 +1,1 @@
-https://gitee.com/egg90/WholeMusic
+改成微服务https://gitee.com/egg90/WholeMusic
