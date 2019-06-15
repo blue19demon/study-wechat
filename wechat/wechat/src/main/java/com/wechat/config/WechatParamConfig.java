@@ -13,7 +13,7 @@ public class WechatParamConfig {
 	// Token
 	private String Token = "imook";
 	// host
-	private String host = "http://iddda4.natappfree.cc";
+	private String host = "http://zr6nuq.natappfree.cc";
 	// callback_uri
 	private String callback_uri = host+"/wxAuthallBack";
 	// EncodingAESKey
