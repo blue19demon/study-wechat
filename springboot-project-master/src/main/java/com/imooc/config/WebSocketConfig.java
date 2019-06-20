@@ -7,7 +7,7 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 /**
  * Created by SqMax on 2018/4/2.
  */
-@Component
+//@Component
 public class WebSocketConfig {
 
     @Bean

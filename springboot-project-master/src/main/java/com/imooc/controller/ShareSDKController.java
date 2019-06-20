@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.imooc.utils.Sha1;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONObject;
+import me.chanjar.weixin.common.bean.WxJsapiSignature;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 
@@ -53,21 +55,32 @@ public class ShareSDKController {
 	 */
 	@RequestMapping("wxConfig")
 	@ResponseBody
-	public Map<String, String> wxConfig(HttpServletRequest request, HttpServletResponse response) {
+	public Map<String, Object> wxConfig(HttpServletRequest request, HttpServletResponse response) {
 		String url=request.getParameter("url");
 		// 开始微信分享链接签名
-		Map<String, String> params =  weixinjsIntefaceSign(url);
+		Map<String, Object> params =  weixinjsIntefaceSign(url);
 		logger.info("params=" + new JSONObject(params).toStringPretty());
 		return params;
 	}
 
+	public Map<String, Object> jsIntefaceSign(String url){
+	try {
+		WxJsapiSignature signature = wxMpService.createJsapiSignature(url);
+		Map<String, Object> sign=BeanUtil.beanToMap(signature);
+		return sign;
+	} catch (WxErrorException e) {
+		e.printStackTrace();
+	}
+	return null;
+}
 	/**
 	 * 微信js-sdk分享
 	 * 
 	 * @param map
 	 * @return
 	 */
-	public Map<String, String> weixinjsIntefaceSign(String url) {
+	@Deprecated
+	public Map<String, Object> weixinjsIntefaceSign(String url) {
 		// 查看缓存数据是否存在
 		String cacheAccess_token = redisTemplate.opsForValue().get("access_token");
 		String cacheTicket = redisTemplate.opsForValue().get("ticket");
@@ -111,7 +124,7 @@ public class ShareSDKController {
 		}
 		String signStr = sb.toString().substring(0, sb.toString().length() - 1);
 		String sign = Sha1.getSha1Sign(signStr);// 签名
-		Map<String, String> result = new HashMap<String, String>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("timestamp", (String) params.get("timestamp"));
 		result.put("noncestr", (String) params.get("noncestr"));
 		result.put("signature", sign);

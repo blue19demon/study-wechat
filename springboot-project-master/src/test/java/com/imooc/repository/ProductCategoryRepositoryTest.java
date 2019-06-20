@@ -36,6 +36,7 @@ public class ProductCategoryRepositoryTest {
 
 //        productCategory.setCategoryType(5);
         ProductCategory productCategory=new ProductCategory("女生最爱",3);
+        productCategory.setCategoryId(1);
         ProductCategory result=repository.save(productCategory);
         Assert.assertNotNull(result);
 //        Assert.assertNotEquals(null,result);
