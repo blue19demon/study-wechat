@@ -29,18 +29,18 @@ wechat:
   mpAppId: wx0985b6dbaeeff28c
   mpAppSecret: d3ba2d045ffc578abd0e9d23f8c93404 #借用号appId,appSecret
   token: imook
-  openAppId: wx6ad144e54af67d87
-  openAppSecret: 91a2ff6d38a2bbccfb7e9f9079108e2e #开放平台测试号appId,appSecret
+  openAppId: wx4492fde581248a1d
+  openAppSecret: a5a91cdbc9b737b028e8bd95d7ed65c0 #开放平台测试号appId,appSecret
   #openAppId: wx0985b6dbaeeff28c
   #openAppSecret: d3ba2d045ffc578abd0e9d23f8c93404 #借用帐号appId,appSecret
-  mchId: 1483469312
-  mchKey: C5245D70627C1F8E9964D494B0735025
+  mchId: 1512382871
+  mchKey: 577b4caef339121384314f827350cf5c
   keyPath: C:/Users/Administrator/Downloads/h5.p12
-  notifyUrl: http://me9ggv.natappfree.cc/notify
+  notifyUrl: http://ssxzrm.natappfree.cc/notify
   templateId:
     orderStatus: GoCullfix05R-rCibvoyI87ZUg50cyieKA5AyX7pPzo
 
 projectUrl:
-  wechatMpAuthorize: http://me9ggv.natappfree.cc
-  wechatOpenAuthorize: http://me9ggv.natappfree.cc
-  sell: http://me9ggv.natappfree.cc
+  wechatMpAuthorize: http://ssxzrm.natappfree.cc
+  wechatOpenAuthorize: http://ssxzrm.natappfree.cc
+  sell: http://ssxzrm.natappfree.cc

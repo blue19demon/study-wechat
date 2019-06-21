@@ -35,7 +35,6 @@ public class PayController {
     @GetMapping("/pay")
     public ModelAndView index(@RequestParam("openid") String openid,
                               @RequestParam("orderId") String orderId,
-                              @RequestParam("returnUrl") String returnUrl,
                               Map<String,Object> map){
         log.info("openid={}",openid);
         //1.查询订单
@@ -49,7 +48,7 @@ public class PayController {
         PayResponse payResponse=payService.create(orderDTO);
 
         map.put("payResponse",payResponse);
-        map.put("returnUrl","http://www.imooc.com");
+        map.put("returnUrl","http://www.baidu.com");
 
         return new ModelAndView("pay/create",map);
     }
