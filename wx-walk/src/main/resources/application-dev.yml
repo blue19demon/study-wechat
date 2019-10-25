@@ -1,0 +1,53 @@
+server:
+  port: 80 
+     
+app:
+  serverUrl: http://q95v5m.natappfree.cc
+  teplateAuthSuccessMsg: URxUnbbPIuj099nVL1cjgAw49IQnFmcaPTo7irDZjrY
+spring:
+  application:
+    name: wx-walk
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/wxWalk?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+    hikari:
+      minimum-idle: 5
+      idle-timeout: 600000
+      maximum-pool-size: 10
+      auto-commit: true
+      pool-name: MyHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+wx:
+  mp:
+    appId: wx0985b6dbaeeff28c
+    config-storage:
+      redis:
+        host: 127.0.0.1
+        port: 6379
+      type: redis
+    secret: d3ba2d045ffc578abd0e9d23f8c93404
+    token: imook
+  pay:
+    appId: wx4492fde581248a1d
+    mchId: 1512382871
+    mchKey: 1492b9eb24ac067333d714412dd591d1
+    
+mybatis:
+  type-aliases-package: com.starter.domain
+  mapper-locations: classpath:mapper/*.xml
+  
+baidu:
+  map:
+    ak: gYPKBfcQee3nAx5jx71VxiBHyl0EbRKT
+    urlPlaceSearch: http://api.map.baidu.com/place/v2/search?query=%s&location=%s&radius=2000&output=xml&ak=%s
+    urlGetLocation: http://api.map.baidu.com/geocoder?location=%s&output=json&key=%s
+    convertUrl: http://api.map.baidu.com/ag/coord/convert?from=2&to=4&x=%s&y=%s
+    
+file:
+  path: \static\qrfile\

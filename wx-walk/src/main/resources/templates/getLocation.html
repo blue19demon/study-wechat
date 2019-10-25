@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<head>
+<meta charset="UTF-8">
+<title>获取地理位置</title>
+<script type="text/javascript" th:src="@{/js/jquery-2.0.0.min.js}"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" th:src="@{/js/wechat_location.js}"></script>
+<title>步行路线规划</title>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/api?v=3.0&ak=8uRNlQOwkiie0dqLTZvpfSK7a0g7AjdT"></script>
+</head>
+<style type="text/css">
+body, html, #container {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	margin: 0;
+	font-family: "微软雅黑";
+}
+</style>
+</head>
+<body>
+	<div id="container"></div>
+	<script type="text/javascript">
+		var map = new BMap.Map("container");
+		map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);
+		var walking = new BMap.WalkingRoute(map, {
+			renderOptions : {
+				map : map,
+				autoViewport : true
+			}
+		});
+		walking.search("天坛公园", "故宫");
+	</script>
+</body>
+</html>
