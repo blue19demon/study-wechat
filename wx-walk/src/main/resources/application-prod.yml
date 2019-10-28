@@ -16,6 +16,9 @@ app:
   
   idcardKey: 71d491b10a631f771ca2c41e1e538ce8
   idcardAPI: http://apis.juhe.cn/idcard/index?key=%s&cardno=%s
+  
+  hisTodayKey: 30fea9d48adbf81fc86713f5333f8701
+  hisTodayAPI: http://api.juheapi.com/japi/toh?key=%s&v=1.0&month=%s&day=%s
 spring:
   application:
     name: wx-walk

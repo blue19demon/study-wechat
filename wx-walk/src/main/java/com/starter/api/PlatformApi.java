@@ -1,5 +1,8 @@
 package com.starter.api;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,18 +46,19 @@ public class PlatformApi {
 		}
 		return "未知电话";
 	}
-	
+
 	public String searchWeather(String city) throws Exception {
-		String apiUrl = String.format(appConfiguration.getWeatherQueryAPI(), city,appConfiguration.getWeatherQueryKey());
+		String apiUrl = String.format(appConfiguration.getWeatherQueryAPI(), city,
+				appConfiguration.getWeatherQueryKey());
 		String result = restTemplate.exchange(apiUrl, HttpMethod.GET, null, String.class).getBody();
 		log.info(result);
 		JSONObject object = JSONObject.parseObject(result);
-        if(object.getInteger("error_code")==0){
-        	JSONObject resultJson = object.getJSONObject("result");
-        	return formatOut(resultJson);
-        }else{
-        	return object.get("error_code")+":"+object.get("reason");
-        }
+		if (object.getInteger("error_code") == 0) {
+			JSONObject resultJson = object.getJSONObject("result");
+			return formatOut(resultJson);
+		} else {
+			return object.get("error_code") + ":" + object.get("reason");
+		}
 	}
 
 	private String formatOut(JSONObject resultJson) {
@@ -70,7 +74,7 @@ public class PlatformApi {
 		buffer.append("风力:").append(realtime.getString("power")).append("\n");
 		buffer.append("空气质量指数:").append(realtime.getString("aqi")).append("\n");
 		JSONArray futures = resultJson.getJSONArray("future");
-		if(futures!=null&&futures.size()>0) {
+		if (futures != null && futures.size() > 0) {
 			buffer.append("近5天天气情况:").append("\n\n\n");
 			buffer.append("-------------------\n");
 			for (int i = 0; i < futures.size(); i++) {
@@ -79,7 +83,7 @@ public class PlatformApi {
 				buffer.append("温度:").append(future.getString("temperature")).append("\n");
 				buffer.append("天气情况:").append(future.getString("weather")).append("\n");
 				buffer.append("风向:").append(future.getString("direct")).append("\n");
-				if(i!=futures.size()-1) {
+				if (i != futures.size() - 1) {
 					buffer.append("-------------------\n");
 				}
 			}
@@ -88,28 +92,29 @@ public class PlatformApi {
 	}
 
 	public String joke() {
-		long timeStampSec = System.currentTimeMillis()/1000;
-		String apiUrl = String.format(appConfiguration.getJokeAPI(),String.format("%010d", timeStampSec),appConfiguration.getJokeKey());
+		long timeStampSec = System.currentTimeMillis() / 1000;
+		String apiUrl = String.format(appConfiguration.getJokeAPI(), String.format("%010d", timeStampSec),
+				appConfiguration.getJokeKey());
 		String result = restTemplate.exchange(apiUrl, HttpMethod.GET, null, String.class).getBody();
 		log.info(result);
 		JSONObject object = JSONObject.parseObject(result);
-        if(object.getInteger("error_code")==0){
-        	JSONObject resultJson = object.getJSONObject("result");
-        	return formatJoke(resultJson);
-        }else{
-        	return object.get("error_code")+":"+object.get("reason");
-        }
+		if (object.getInteger("error_code") == 0) {
+			JSONObject resultJson = object.getJSONObject("result");
+			return formatJoke(resultJson);
+		} else {
+			return object.get("error_code") + ":" + object.get("reason");
+		}
 	}
 
 	private String formatJoke(JSONObject resultJson) {
 		StringBuffer buffer = new StringBuffer();
 		JSONArray data = resultJson.getJSONArray("data");
-		if(data!=null&&data.size()>0) {
+		if (data != null && data.size() > 0) {
 			buffer.append("----------------------------\n");
 			for (int i = 0; i < data.size(); i++) {
 				JSONObject item = data.getJSONObject(i);
 				buffer.append(item.getString("content")).append("\n");
-				if(i!=data.size()-1) {
+				if (i != data.size() - 1) {
 					buffer.append("----------------------------\n");
 				}
 			}
@@ -118,14 +123,14 @@ public class PlatformApi {
 	}
 
 	public String idcard(String idcard) {
-		String apiUrl = String.format(appConfiguration.getIdcardAPI(),appConfiguration.getIdcardKey(),idcard);
+		String apiUrl = String.format(appConfiguration.getIdcardAPI(), appConfiguration.getIdcardKey(), idcard);
 		String result = restTemplate.exchange(apiUrl, HttpMethod.GET, null, String.class).getBody();
 		log.info(result);
 		JSONObject object = JSONObject.parseObject(result);
 		JSONObject resultJson = object.getJSONObject("result");
-        if(resultJson!=null){
-        	return formatIdcard(resultJson);
-        }
+		if (resultJson != null) {
+			return formatIdcard(resultJson);
+		}
 		return "出错了";
 	}
 
@@ -134,6 +139,50 @@ public class PlatformApi {
 		buffer.append("地区:").append(result.getString("area")).append("\n");
 		buffer.append("性别:").append(result.getString("sex")).append("\n");
 		buffer.append("出生日期:").append(result.getString("birthday")).append("\n");
+		return buffer.toString();
+	}
+
+	public String hisToday(String date) {
+		SimpleDateFormat smf = new SimpleDateFormat("MM-dd");
+		Date dt = null;
+		try {
+			dt = smf.parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return "请输入正确日期";
+		}
+		String year = String.format("%tY", dt);
+
+		String mon = String.format("%tm", dt);
+
+		String day = String.format("%td", dt);
+		String apiUrl = String.format(appConfiguration.getHisTodayAPI(), appConfiguration.getHisTodayKey(),
+				mon, day);
+		String result = restTemplate.exchange(apiUrl, HttpMethod.GET, null, String.class).getBody();
+		log.info(result);
+		JSONObject object = JSONObject.parseObject(result);
+		if (object.getInteger("error_code") == 0) {
+			JSONArray resultJson = object.getJSONArray("result");
+			return formatHisToday(resultJson);
+		} else {
+			return object.get("error_code") + ":" + object.get("reason");
+		}
+	}
+
+	private String formatHisToday(JSONArray data) {
+		StringBuffer buffer = new StringBuffer();
+		if (data != null && data.size() > 0) {
+			buffer.append("----------------------------\n");
+			for (int i = 0; i < data.size(); i++) {
+				JSONObject item = data.getJSONObject(i);
+				buffer.append(item.getString("lunar")).append("\n");
+				buffer.append(item.getString("title")).append("\n");
+				buffer.append(item.getString("des")).append("\n");
+				if (i != data.size() - 1) {
+					buffer.append("----------------------------\n");
+				}
+			}
+		}
 		return buffer.toString();
 	}
 }

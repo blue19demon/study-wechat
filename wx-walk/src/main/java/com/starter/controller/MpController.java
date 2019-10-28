@@ -1,6 +1,8 @@
 package com.starter.controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -92,20 +94,22 @@ public class MpController {
 				String content = inMessage.getContent().trim();
 				if (content.equals("附近")) {
 					respContent = getUsage();
-				}else if (content.equals("?")||content.equals("？")) {
+				} else if (content.equals("?") || content.equals("？")) {
 					respContent = getOtherUsage();
-				}else if (content.startsWith("翻译")) {
+				} else if (content.startsWith("翻译")) {
 					respContent = baiduTransApi.getTransResult(content.substring(2));
-				}else if (content.startsWith("音乐")||content.startsWith("歌曲")) {
-					
-				}else if (content.startsWith("手机号")) {
+				} else if (content.startsWith("音乐") || content.startsWith("歌曲")) {
+
+				} else if (content.startsWith("手机号")) {
 					respContent = platformApi.searchMobile(content.substring(3));
-				}else if (content.startsWith("天气")) {
+				} else if (content.startsWith("天气")) {
 					respContent = platformApi.searchWeather(content.substring(2));
-				}else if (content.startsWith("开心一笑")) {
+				} else if (content.startsWith("开心一笑")) {
 					respContent = platformApi.joke();
-				}else if (content.startsWith("身份证查询")) {
+				} else if (content.startsWith("身份证查询")) {
 					respContent = platformApi.idcard(content.substring(5));
+				} else if (content.startsWith("历史上的")) {
+					respContent = platformApi.hisToday(content.substring(4));
 				}
 				// 周边搜索
 				else if (content.startsWith("附近")) {
@@ -123,11 +127,11 @@ public class MpController {
 						if (null == placeList || 0 == placeList.size()) {
 							respContent = String.format("/难过，您发送的位置附近未搜索到“%s”信息！", keyWord);
 						} else {
-							List<WxMpXmlOutNewsMessage.Item> articleList = baiduMapApi.makeArticleList(placeList, location.getBd09Lng(),
-									location.getBd09Lat());
+							List<WxMpXmlOutNewsMessage.Item> articleList = baiduMapApi.makeArticleList(placeList,
+									location.getBd09Lng(), location.getBd09Lat());
 							// 回复图文消息
-							WxMpXmlOutNewsMessage newsMessage=WxMpXmlOutMessage.NEWS().articles(articleList).fromUser(toUserName)
-									.toUser(fromUserName).build();
+							WxMpXmlOutNewsMessage newsMessage = WxMpXmlOutMessage.NEWS().articles(articleList)
+									.fromUser(toUserName).toUser(fromUserName).build();
 							log.info(JSONObject.toJSONString(newsMessage, true));
 							respXml = newsMessage.toXml();
 						}
@@ -171,7 +175,10 @@ public class MpController {
 				// 点击菜单 我的名片
 				if (eventType.equals(WxConsts.EventType.CLICK)) {
 					if ("MY_CARD".equals(inMessage.getEventKey())) {
-						return getMyCard(request,fromUserName, toUserName);
+						return getMyCard(request, fromUserName, toUserName);
+					} else if ("HIS_TODAY".equals(inMessage.getEventKey())) {
+						SimpleDateFormat smf = new SimpleDateFormat("yyyy-MM-dd");
+						respContent = platformApi.hisToday(smf.format(new Date()));
 					}
 				}
 			} else {
@@ -192,12 +199,10 @@ public class MpController {
 		return null;
 	}
 
-	
-
-	private String getMyCard(HttpServletRequest request,String fromUserName, String toUserName) {
+	private String getMyCard(HttpServletRequest request, String fromUserName, String toUserName) {
 		String media_id = null;
 		try {
-			WxMpUser wxMpUser= wxMpService.getUserService().userInfo(fromUserName);
+			WxMpUser wxMpUser = wxMpService.getUserService().userInfo(fromUserName);
 			media_id = QRCodeService.QRCodeCreate(fromUserName, wxMpUser.getHeadImgUrl());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -236,16 +241,29 @@ public class MpController {
 		buffer.append("格式：附近+关键词\n例如：附近ATM、附近KTV、附近厕所");
 		return buffer.toString();
 	}
-	
+
 	private String getOtherUsage() {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("聚合功能使用说明").append("\n\n");
-		buffer.append("1）发送歌曲或者音乐+歌名，例如歌曲许嵩，获取音乐，/::)点我试试<a href='weixin://bizmsgmenu?msgmenuid=1&msgmenucontent=音乐周杰伦'>音乐周杰伦</a>").append("\n");
-		buffer.append("2）翻译+句子，例如翻译我要使用，/::)点我试试<a href='weixin://bizmsgmenu?msgmenuid=2&msgmenucontent=翻译我要试用'>翻译我要试用</a>").append("\n");
-		buffer.append("3）手机号+手机号，查询手机归宿地，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=3&msgmenucontent=手机号18076575691'>手机号18076575691</a>").append("\n");
-		buffer.append("4）天气+城市，查询天气预报，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=4&msgmenucontent=天气成都'>天气成都</a>").append("\n");
-		buffer.append("5）开心一笑，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=5&msgmenucontent=开心一笑'>开心一笑</a>").append("\n");
-		buffer.append("6）身份证查询+身份证号码，查询身份证归宿地，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=6&msgmenucontent=身份证查询330326198903081211'>身份证查询330326198903081211</a>").append("\n");
+		buffer.append(
+				"1）发送歌曲或者音乐+歌名，例如歌曲许嵩，获取音乐，/::)点我试试<a href='weixin://bizmsgmenu?msgmenuid=1&msgmenucontent=音乐周杰伦'>音乐周杰伦</a>")
+				.append("\n");
+		buffer.append(
+				"2）翻译+句子，例如翻译我要使用，/::)点我试试<a href='weixin://bizmsgmenu?msgmenuid=2&msgmenucontent=翻译我要试用'>翻译我要试用</a>")
+				.append("\n");
+		buffer.append(
+				"3）手机号+手机号，查询手机归宿地，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=3&msgmenucontent=手机号18076575691'>手机号18076575691</a>")
+				.append("\n");
+		buffer.append("4）天气+城市，查询天气预报，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=4&msgmenucontent=天气成都'>天气成都</a>")
+				.append("\n");
+		buffer.append("5）开心一笑，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=5&msgmenucontent=开心一笑'>开心一笑</a>")
+				.append("\n");
+		buffer.append(
+				"6）身份证查询+身份证号码，查询身份证归宿地，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=6&msgmenucontent=身份证查询330326198903081211'>身份证查询330326198903081211</a>")
+				.append("\n");
+		buffer.append(
+				"6）历史上的+年月，查询历史上的今天，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=7&msgmenucontent=历史上的10-23'>历史上的10-23</a>")
+				.append("\n");
 		return buffer.toString();
 	}
 }

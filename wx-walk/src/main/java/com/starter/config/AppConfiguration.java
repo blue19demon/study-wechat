@@ -31,4 +31,8 @@ public class AppConfiguration {
 	private String idcardKey;
 
 	private String idcardAPI;
+	
+	private String hisTodayKey;
+
+	private String hisTodayAPI;
 }

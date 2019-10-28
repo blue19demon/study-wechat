@@ -83,14 +83,28 @@ public class MenuInitService {
 			subButtons02.add(button025);
 			
 			button02.setSubButtons(subButtons02);
+			buttons.add(button02);
 			
 			WxMenuButton button03 = new WxMenuButton();
 			button03.setName("我的名片");
 			button03.setType("click");
-			button03.setKey("MY_CARD");
+			button03.setKey("BIG100");
+			List<WxMenuButton> subButtons03 = new ArrayList<>();
+			
+			WxMenuButton button031 = new WxMenuButton();
+			button031.setName("我的名片");
+			button031.setType("click");
+			button031.setKey("MY_CARD");
+			subButtons03.add(button031);
+			
+			WxMenuButton button032 = new WxMenuButton();
+			button032.setName("历史上的今天");
+			button032.setType("click");
+			button032.setKey("HIS_TODAY");
+			subButtons03.add(button032);
+			button03.setSubButtons(subButtons03);
 			buttons.add(button03);
 			
-			buttons.add(button02);
 			menu.setButtons(buttons);
 			wxMpService.getMenuService().menuCreate(menu);
 			
