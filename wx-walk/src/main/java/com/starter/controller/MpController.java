@@ -14,11 +14,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.starter.api.BaiduMapApi;
+import com.starter.api.BaiduTransApi;
+import com.starter.api.PlatformApi;
+import com.starter.api.TulingMsgApi;
 import com.starter.domain.UserLocation;
 import com.starter.pojo.BaiduPlace;
 import com.starter.service.QRCodeService;
 import com.starter.service.UserLocationService;
-import com.starter.utils.BaiduMapApi;
 
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
@@ -39,9 +42,14 @@ public class MpController {
 	private UserLocationService userLocationService;
 	@Autowired
 	private BaiduMapApi baiduMapApi;
-
 	@Autowired
 	private QRCodeService QRCodeService;
+	@Autowired
+	private TulingMsgApi tulingMsgApi;
+	@Autowired
+	private BaiduTransApi baiduTransApi;
+	@Autowired
+	private PlatformApi platformApi;
 
 	@GetMapping("/check")
 	public void check(HttpServletRequest request, HttpServletResponse response) {
@@ -84,6 +92,20 @@ public class MpController {
 				String content = inMessage.getContent().trim();
 				if (content.equals("附近")) {
 					respContent = getUsage();
+				}else if (content.equals("?")||content.equals("？")) {
+					respContent = getOtherUsage();
+				}else if (content.startsWith("翻译")) {
+					respContent = baiduTransApi.getTransResult(content.substring(2));
+				}else if (content.startsWith("音乐")||content.startsWith("歌曲")) {
+					
+				}else if (content.startsWith("手机号")) {
+					respContent = platformApi.searchMobile(content.substring(3));
+				}else if (content.startsWith("天气")) {
+					respContent = platformApi.searchWeather(content.substring(2));
+				}else if (content.startsWith("开心一笑")) {
+					respContent = platformApi.joke();
+				}else if (content.startsWith("身份证查询")) {
+					respContent = platformApi.idcard(content.substring(5));
 				}
 				// 周边搜索
 				else if (content.startsWith("附近")) {
@@ -110,8 +132,9 @@ public class MpController {
 							respXml = newsMessage.toXml();
 						}
 					}
-				} else
-					respContent = getUsage();
+				} else {
+					respContent = tulingMsgApi.getTulingResult(content);
+				}
 			} // 地理位置消息
 			else if (msgType.equals(WxConsts.XmlMsgType.LOCATION)) {
 				// 用户发送的经纬度
@@ -169,6 +192,8 @@ public class MpController {
 		return null;
 	}
 
+	
+
 	private String getMyCard(HttpServletRequest request,String fromUserName, String toUserName) {
 		String media_id = null;
 		try {
@@ -192,6 +217,8 @@ public class MpController {
 		buffer.append("您是否有过出门在外四处找ATM或厕所的经历？").append("\n\n");
 		buffer.append("您是否有过出差在外搜寻美食或娱乐场所的经历？").append("\n\n");
 		buffer.append("周边搜索为您的出行保驾护航，为您提供专业的周边生活指南，回复“附近”开始体验吧！");
+		buffer.append("\n\n").append("\n\n");
+		buffer.append("<a href='weixin://bizmsgmenu?msgmenuid=100&msgmenucontent=?'>体验更多>></a>");
 		return buffer.toString();
 	}
 
@@ -207,6 +234,18 @@ public class MpController {
 		buffer.append("点击窗口底部的“+”按钮，选择“位置”，点“发送”").append("\n\n");
 		buffer.append("2）指定关键词搜索").append("\n");
 		buffer.append("格式：附近+关键词\n例如：附近ATM、附近KTV、附近厕所");
+		return buffer.toString();
+	}
+	
+	private String getOtherUsage() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("聚合功能使用说明").append("\n\n");
+		buffer.append("1）发送歌曲或者音乐+歌名，例如歌曲许嵩，获取音乐，/::)点我试试<a href='weixin://bizmsgmenu?msgmenuid=1&msgmenucontent=音乐周杰伦'>音乐周杰伦</a>").append("\n");
+		buffer.append("2）翻译+句子，例如翻译我要使用，/::)点我试试<a href='weixin://bizmsgmenu?msgmenuid=2&msgmenucontent=翻译我要试用'>翻译我要试用</a>").append("\n");
+		buffer.append("3）手机号+手机号，查询手机归宿地，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=3&msgmenucontent=手机号18076575691'>手机号18076575691</a>").append("\n");
+		buffer.append("4）天气+城市，查询天气预报，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=4&msgmenucontent=天气成都'>天气成都</a>").append("\n");
+		buffer.append("5）开心一笑，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=5&msgmenucontent=开心一笑'>开心一笑</a>").append("\n");
+		buffer.append("6）身份证查询+身份证号码，查询身份证归宿地，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=6&msgmenucontent=身份证查询330326198903081211'>身份证查询330326198903081211</a>").append("\n");
 		return buffer.toString();
 	}
 }

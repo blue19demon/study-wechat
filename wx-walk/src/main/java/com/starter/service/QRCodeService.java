@@ -38,9 +38,11 @@ public class QRCodeService {
 	public String QRCodeCreate(String openId,String headImageUrl) {
 		FileOutputStream fos = null;
 		try {
-			String resourcePpath = System.getProperty("user.dir")+"\\src\\main\\resources";
-			String path = resourcePpath.concat(this.path);
-			File logoFile=new File(path+File.separator+openId+".jpg");
+			File dir=new File(this.path);
+			if(!dir.exists()) {
+				dir.mkdir();
+			}
+			File logoFile=new File(this.path+File.separator+openId+".jpg");
 			ImageDownload.downloadPicture(headImageUrl,logoFile);
 			byte[] content = QrcodeUtils.createQrcode(appConfiguration.getServerUrl() + "/authorize", logoFile);
 			File outFile = new File(path+File.separator+openId+"_logo.jpg");

@@ -153,5 +153,17 @@
 				</filters>
 			</build>
 		</profile>
+		
+		<profile>
+			<id>prod</id>
+			<properties>
+				<spring.profiles.active>prod</spring.profiles.active>
+			</properties>
+			<build>
+				<filters>
+					<filter>src/main/resources/application-prod.yml</filter>
+				</filters>
+			</build>
+		</profile>
 	</profiles>
 </project>

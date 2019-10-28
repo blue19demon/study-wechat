@@ -1,20 +1,30 @@
 server:
-  port: 80 
-     
+  port: 80
 app:
-  serverUrl: http://xxxxxxx
+  serverUrl: http://122.51.69.242
   teplateAuthSuccessMsg: URxUnbbPIuj099nVL1cjgAw49IQnFmcaPTo7irDZjrY
   tulingKey: f0d99d4e9fc44ec096afdf510c575437
   tulingAPI: http://www.tuling123.com/openapi/api?key=%s&info=%s
+  
+  mobileQueryAPI: https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=%s
+  
+  weatherQueryKey: 9c6cffd8234b72883c8eb29dafaf1186
+  weatherQueryAPI: http://apis.juhe.cn/simpleWeather/query?city=%s&key=%s
+  
+  jokeKey: adfcb4c94398b302dc292480c603e461
+  jokeAPI: http://japi.juhe.cn/joke/content/list.from?sort=desc&page=1&pagesize=5&time=%s&key=%s
+  
+  idcardKey: 71d491b10a631f771ca2c41e1e538ce8
+  idcardAPI: http://apis.juhe.cn/idcard/index?key=%s&cardno=%s
 spring:
   application:
     name: wx-walk
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://xxxxxx:3306/eat?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: xxxxxxx
-    password: xxxxxxxx
+    url: jdbc:mysql://cd-cdb-4tlk3omc.sql.tencentcdb.com:62785/wxWalk?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: qwer9527
     hikari:
       minimum-idle: 5
       idle-timeout: 600000
@@ -30,7 +40,7 @@ wx:
     appId: wx0985b6dbaeeff28c
     config-storage:
       redis:
-        host: xxxxxxxx
+        host: 127.0.0.1
         port: 6379
       type: redis
     secret: d3ba2d045ffc578abd0e9d23f8c93404
@@ -56,4 +66,4 @@ baidu:
     transSecurityKey: xHp5E7D0ULLkVT2Ac3Xg
     
 file:
-  path: \static\qrfile\
+  path: /home/uploads/

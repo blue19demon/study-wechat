@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.starter.api.BaiduMapApi;
 import com.starter.domain.UserLocation;
-import com.starter.utils.BaiduMapApi;
 
 @Controller
 public class JSSDKController {
