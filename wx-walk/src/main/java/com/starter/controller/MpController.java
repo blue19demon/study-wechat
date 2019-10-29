@@ -2,7 +2,6 @@ package com.starter.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.starter.api.BaiduMapApi;
+import com.starter.api.MusicApi;
+import com.starter.api.VedioApi;
 import com.starter.api.enums.ApiManifest;
 import com.starter.api.strategy.PlatformApiContext;
 import com.starter.domain.UserLocation;
@@ -42,6 +43,10 @@ public class MpController {
 	private UserLocationService userLocationService;
 	@Autowired
 	private BaiduMapApi baiduMapApi;
+	@Autowired
+	private MusicApi musicApi;
+	@Autowired
+	private VedioApi vedioApi;
 	@Autowired
 	private QRCodeService QRCodeService;
 	@Autowired
@@ -93,7 +98,7 @@ public class MpController {
 				} else if (content.startsWith("翻译")) {
 					respContent = platformApiContext.excuteHttp(content.substring(2), ApiManifest.BAIDU_TRANS);
 				} else if (content.startsWith("音乐") || content.startsWith("歌曲")) {
-
+					respXml = musicApi.search(fromUserName,toUserName,content.substring(2));
 				} else if (content.startsWith("手机号")) {
 					respContent = platformApiContext.excuteHttp(content.substring(3), ApiManifest.MOBILE_QUERY);
 				} else if (content.startsWith("天气")) {
@@ -108,6 +113,8 @@ public class MpController {
 					respContent = platformApiContext.excuteHttp(content.substring(4), ApiManifest.WEIXIN_QUERY);
 				} else if (content.startsWith("新闻头条")) {
 					respContent = platformApiContext.excuteHttp(content.substring(4), ApiManifest.TOUTIAO);
+				} else if (content.startsWith("搞笑达人")) {
+					respXml = vedioApi.search(fromUserName, toUserName, VedioApi.ALL);
 				}
 				// 周边搜索
 				else if (content.startsWith("附近")) {
@@ -171,7 +178,12 @@ public class MpController {
 						return getMyCard(request, fromUserName, toUserName);
 					} else if ("HIS_TODAY".equals(inMessage.getEventKey())) {
 						SimpleDateFormat smf = new SimpleDateFormat("yyyy-MM-dd");
-						respContent = platformApiContext.excuteHttp(smf.format(new Date()), ApiManifest.HIS_TODAY);
+						//respContent = platformApiContext.excuteHttp(smf.format(new Date()), ApiManifest.HIS_TODAY);
+						respContent = platformApiContext.excuteHttp(null, ApiManifest.HIS_TODAY_NEW);
+					} else if ("MAIN_MENU".equals(inMessage.getEventKey())) {
+						respContent = getOtherUsage();
+					} else if ("JOKE_VEDIO".equals(inMessage.getEventKey())) {
+						respXml = vedioApi.search(fromUserName, toUserName, VedioApi.ONE);
 					}
 				}
 			} else {
@@ -262,6 +274,9 @@ public class MpController {
 				.append("\n");
 		buffer.append(
 				"9）新闻头条，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=9&msgmenucontent=新闻头条'>新闻头条</a>")
+				.append("\n");
+		buffer.append(
+				"10）搞笑达人，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=10&msgmenucontent=搞笑达人'>搞笑达人</a>")
 				.append("\n");
 		return buffer.toString();
 	}

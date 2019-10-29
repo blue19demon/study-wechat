@@ -60,7 +60,7 @@ public class ApiHisToday extends ApiStrategy {
 				}
 			}
 		}
-		return buffer.toString();
+		return "功能正在调试";//buffer.toString();
 	}
 
 	@Override

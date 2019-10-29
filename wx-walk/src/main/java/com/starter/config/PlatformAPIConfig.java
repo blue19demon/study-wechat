@@ -37,12 +37,22 @@ public class PlatformAPIConfig {
 	private String transAppid;
 
 	private String transSecurityKey;
-	
+
 	private String weixinQueryKey;
 
 	private String weixinQueryAPI;
-	
+
 	private String toutiaoKey;
 
 	private String toutiaoAPI;
+
+	private String musicAPI;
+
+	private String vedioSearchAPI;
+
+	private String vedioDetailAPI;
+
+	private String hisTodayNewAPI;
+
+	private String satinApi;
 }

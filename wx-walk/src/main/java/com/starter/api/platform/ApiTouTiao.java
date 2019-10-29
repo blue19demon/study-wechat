@@ -1,8 +1,5 @@
 package com.starter.api.platform;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.starter.api.enums.ApiManifest;
 import com.starter.api.strategy.ApiStrategy;
 import com.starter.config.PlatformAPIConfig;
+import com.starter.utils.RandomArray;
 
 @Component
 public class ApiTouTiao extends ApiStrategy {
@@ -39,7 +37,7 @@ public class ApiTouTiao extends ApiStrategy {
 	public String handleSuccess(JSONObject resultJson) {
 		JSONObject result = resultJson.getJSONObject("result");
 		StringBuffer buffer = new StringBuffer();
-		JSONArray data = createRandomList(result.getJSONArray("data"),5);
+		JSONArray data = RandomArray.createRandomList(result.getJSONArray("data"),5);
 		if (data != null && data.size() > 0) {
 			buffer.append("----------------------------\n");
 			for (int i = 0; i < data.size(); i++) {
@@ -55,32 +53,6 @@ public class ApiTouTiao extends ApiStrategy {
 		return buffer.toString();
 	}
 
-	/**从list中随机抽取元素
-	 * @return  
-	 * @Title: createRandomList 
-	 * @Description: TODO
-	 * @param list
-	 * @param i 
-	 * @return void  
-	 * @throws 
-	 */ 
-	private static JSONArray createRandomList(JSONArray  list, int n) {
-		Map<Integer, String> map = new HashMap<Integer, String>();
-		JSONArray listNew = new JSONArray();
-		if(list.size()<=n){
-			return list;
-		}else{
-			while(map.size()<n){
-				int random = (int) (Math.random() * list.size());
-				if (!map.containsKey(random)) {
-					map.put(random, "");
-					listNew.add(list.get(random));
-				}
-			}
-			return listNew;
-		}
-	}
-	
 	@Override
 	public Boolean isJuheAPI() {
 		return Boolean.TRUE;

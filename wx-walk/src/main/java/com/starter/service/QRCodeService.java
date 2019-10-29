@@ -43,7 +43,7 @@ public class QRCodeService {
 				dir.mkdir();
 			}
 			File logoFile=new File(this.path+File.separator+openId+".jpg");
-			ImageDownload.downloadPicture(headImageUrl,logoFile);
+			FileDownload.download(headImageUrl,logoFile);
 			byte[] content = QrcodeUtils.createQrcode(appConfiguration.getServerUrl() + "/authorize", logoFile);
 			File outFile = new File(path+File.separator+openId+"_logo.jpg");
 			fos = new FileOutputStream(outFile);

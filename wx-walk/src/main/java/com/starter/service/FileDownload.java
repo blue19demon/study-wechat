@@ -8,16 +8,12 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class ImageDownload {
-    public static void main(String[] args) {
-        String url = "http://thirdwx.qlogo.cn/mmopen/vi_32/Q2pWSGI7lwd7TusEp749OsgWlxosE1zzH4xKgvJt1KLbvoicQB5rZLG7lMFH2dzpUT3HPKS4DjSEg94YqibS8K7g/132";
-        downloadPicture(url,new File("D://a.jpg"));
-    }
+public class FileDownload {
     //链接url下载图片
-    public static void downloadPicture(String imageURL,File path) {
+    public static void download(String resourcesURL,File path) {
         URL url = null;
         try {
-            url = new URL(imageURL);
+            url = new URL(resourcesURL);
             DataInputStream dataInputStream = new DataInputStream(url.openStream());
 
             FileOutputStream fileOutputStream = new FileOutputStream(path);

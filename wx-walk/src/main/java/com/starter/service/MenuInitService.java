@@ -86,7 +86,7 @@ public class MenuInitService {
 			buttons.add(button02);
 			
 			WxMenuButton button03 = new WxMenuButton();
-			button03.setName("我的名片");
+			button03.setName("更多");
 			button03.setType("click");
 			button03.setKey("BIG100");
 			List<WxMenuButton> subButtons03 = new ArrayList<>();
@@ -102,6 +102,19 @@ public class MenuInitService {
 			button032.setType("click");
 			button032.setKey("HIS_TODAY");
 			subButtons03.add(button032);
+			
+			WxMenuButton button033 = new WxMenuButton();
+			button033.setName("百思不得其解");
+			button033.setType("click");
+			button033.setKey("JOKE_VEDIO");
+			subButtons03.add(button033);
+			
+			WxMenuButton button034 = new WxMenuButton();
+			button034.setName("主菜单");
+			button034.setType("click");
+			button034.setKey("MAIN_MENU");
+			subButtons03.add(button034);
+			
 			button03.setSubButtons(subButtons03);
 			buttons.add(button03);
 			

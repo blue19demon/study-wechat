@@ -24,6 +24,11 @@ platform:
     weixinQueryAPI: http://v.juhe.cn/weixin/query?key=%s
     toutiaoKey: 151cc620a5675c6cc8d7c04f45011206
     toutiaoAPI: http://v.juhe.cn/toutiao/index?type=%s&key=%s
+    musicAPI: https://api.apiopen.top/searchMusic?name=%s
+    vedioSearchAPI: https://api.apiopen.top/getJoke?page=1&count=50&type=video
+    vedioDetailAPI: https://api.apiopen.top/getSingleJoke?sid=%s
+    hisTodayNewAPI: https://www.ipip5.com/today/api.php?type=json
+    satinApi: https://www.apiopen.top/satinApi?type=1&page=1
 spring:
   application:
     name: wx-walk
