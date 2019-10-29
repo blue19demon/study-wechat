@@ -17,10 +17,5 @@ public class BaiduApiConfiguration {
 	 private String mapUrlGetLocation;
 	 
 	 private String mapConvertUrl;
-	 
-	 private String transApiUrl;
-	 
-	 private String transAppid;
-	 
-	 private String transSecurityKey;
+	
 }

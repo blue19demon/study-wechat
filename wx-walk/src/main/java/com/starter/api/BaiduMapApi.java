@@ -21,8 +21,6 @@ import com.starter.config.BaiduApiConfiguration;
 import com.starter.domain.UserLocation;
 import com.starter.pojo.BaiduPlace;
 
-import me.chanjar.weixin.mp.bean.message.WxMpXmlOutNewsMessage;
-
 /**
  * 百度地图操作类
  */
@@ -135,25 +133,18 @@ public class BaiduMapApi {
 	 * @param bd09Lat 纬度
 	 * @return List<Article>
 	 */
-	public  List<WxMpXmlOutNewsMessage.Item> makeArticleList(List<BaiduPlace> placeList, String bd09Lng, String bd09Lat) {
+	public String makeArticleList(List<BaiduPlace> placeList, String bd09Lng, String bd09Lat) {
 		// 项目的根路径
 		String basePath = appConfiguration.getServerUrl();
-		List<WxMpXmlOutNewsMessage.Item> list = new ArrayList<WxMpXmlOutNewsMessage.Item>();
 		BaiduPlace place = null;
+		StringBuffer buffer = new StringBuffer();
 		for (int i = 0; i < placeList.size(); i++) {
 			place = placeList.get(i);
-			WxMpXmlOutNewsMessage.Item article = new WxMpXmlOutNewsMessage.Item();
-			article.setTitle(place.getName() + "\n距离约" + place.getDistance() + "米");
-			// P1表示用户发送的位置（坐标转换后），p2表示当前POI所在位置
-			article.setUrl(String.format(basePath + "/route?p1=%s,%s&p2=%s,%s", bd09Lng, bd09Lat, place.getLng(), place.getLat()));
-			// 将首条图文的图片设置为大图
-			if (i == 0)
-				article.setPicUrl(basePath + "/images/poisearch.png");
-			else
-				article.setPicUrl(basePath + "/images/navi.png");
-			list.add(article);
+			buffer.append(place.getName() + "\n");
+			String route = String.format(basePath + "/route?p1=%s,%s&p2=%s,%s", bd09Lng, bd09Lat, place.getLng(), place.getLat());
+			buffer.append("<a href='"+route+"'>点击导航</a>").append("\n");
 		}
-		return list;
+		return buffer.toString();
 	}
 
 	/**

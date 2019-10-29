@@ -17,9 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.starter.api.BaiduMapApi;
-import com.starter.api.BaiduTransApi;
-import com.starter.api.PlatformApi;
-import com.starter.api.TulingMsgApi;
+import com.starter.api.enums.ApiManifest;
+import com.starter.api.strategy.PlatformApiContext;
 import com.starter.domain.UserLocation;
 import com.starter.pojo.BaiduPlace;
 import com.starter.service.QRCodeService;
@@ -31,7 +30,6 @@ import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutImageMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
-import me.chanjar.weixin.mp.bean.message.WxMpXmlOutNewsMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutTextMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 
@@ -47,11 +45,7 @@ public class MpController {
 	@Autowired
 	private QRCodeService QRCodeService;
 	@Autowired
-	private TulingMsgApi tulingMsgApi;
-	@Autowired
-	private BaiduTransApi baiduTransApi;
-	@Autowired
-	private PlatformApi platformApi;
+	private PlatformApiContext platformApiContext;
 
 	@GetMapping("/check")
 	public void check(HttpServletRequest request, HttpServletResponse response) {
@@ -97,19 +91,23 @@ public class MpController {
 				} else if (content.equals("?") || content.equals("？")) {
 					respContent = getOtherUsage();
 				} else if (content.startsWith("翻译")) {
-					respContent = baiduTransApi.getTransResult(content.substring(2));
+					respContent = platformApiContext.excuteHttp(content.substring(2), ApiManifest.BAIDU_TRANS);
 				} else if (content.startsWith("音乐") || content.startsWith("歌曲")) {
 
 				} else if (content.startsWith("手机号")) {
-					respContent = platformApi.searchMobile(content.substring(3));
+					respContent = platformApiContext.excuteHttp(content.substring(3), ApiManifest.MOBILE_QUERY);
 				} else if (content.startsWith("天气")) {
-					respContent = platformApi.searchWeather(content.substring(2));
+					respContent = platformApiContext.excuteHttp(content.substring(2), ApiManifest.WEATHER_QUERY);
 				} else if (content.startsWith("开心一笑")) {
-					respContent = platformApi.joke();
+					respContent = platformApiContext.excuteHttp(content, ApiManifest.JOKE);
 				} else if (content.startsWith("身份证查询")) {
-					respContent = platformApi.idcard(content.substring(5));
+					respContent = platformApiContext.excuteHttp(content.substring(5), ApiManifest.IDCARD);
 				} else if (content.startsWith("历史上的")) {
-					respContent = platformApi.hisToday(content.substring(4));
+					respContent = platformApiContext.excuteHttp(content.substring(4), ApiManifest.HIS_TODAY);
+				} else if (content.startsWith("微信精选")) {
+					respContent = platformApiContext.excuteHttp(content.substring(4), ApiManifest.WEIXIN_QUERY);
+				} else if (content.startsWith("新闻头条")) {
+					respContent = platformApiContext.excuteHttp(content.substring(4), ApiManifest.TOUTIAO);
 				}
 				// 周边搜索
 				else if (content.startsWith("附近")) {
@@ -127,17 +125,12 @@ public class MpController {
 						if (null == placeList || 0 == placeList.size()) {
 							respContent = String.format("/难过，您发送的位置附近未搜索到“%s”信息！", keyWord);
 						} else {
-							List<WxMpXmlOutNewsMessage.Item> articleList = baiduMapApi.makeArticleList(placeList,
+							respContent = baiduMapApi.makeArticleList(placeList,
 									location.getBd09Lng(), location.getBd09Lat());
-							// 回复图文消息
-							WxMpXmlOutNewsMessage newsMessage = WxMpXmlOutMessage.NEWS().articles(articleList)
-									.fromUser(toUserName).toUser(fromUserName).build();
-							log.info(JSONObject.toJSONString(newsMessage, true));
-							respXml = newsMessage.toXml();
 						}
 					}
 				} else {
-					respContent = tulingMsgApi.getTulingResult(content);
+					respContent = platformApiContext.excuteHttp(content, ApiManifest.TULING);
 				}
 			} // 地理位置消息
 			else if (msgType.equals(WxConsts.XmlMsgType.LOCATION)) {
@@ -157,7 +150,7 @@ public class MpController {
 				userLocationService.saveUserLocation(inMessage.getLabel(), fromUserName, lng, lat, bd09Lng, bd09Lat);
 
 				StringBuffer buffer = new StringBuffer();
-				buffer.append("[愉快]").append("成功接收您的位置！").append("\n\n");
+				buffer.append("[愉快]").append("成功接收您的位置:【"+inMessage.getLabel()+"】！").append("\n\n");
 				buffer.append("您可以输入搜索关键词获取周边信息了，例如：").append("\n");
 				buffer.append("        附近ATM").append("\n");
 				buffer.append("        附近KTV").append("\n");
@@ -178,7 +171,7 @@ public class MpController {
 						return getMyCard(request, fromUserName, toUserName);
 					} else if ("HIS_TODAY".equals(inMessage.getEventKey())) {
 						SimpleDateFormat smf = new SimpleDateFormat("yyyy-MM-dd");
-						respContent = platformApi.hisToday(smf.format(new Date()));
+						respContent = platformApiContext.excuteHttp(smf.format(new Date()), ApiManifest.HIS_TODAY);
 					}
 				}
 			} else {
@@ -262,7 +255,13 @@ public class MpController {
 				"6）身份证查询+身份证号码，查询身份证归宿地，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=6&msgmenucontent=身份证查询330326198903081211'>身份证查询330326198903081211</a>")
 				.append("\n");
 		buffer.append(
-				"6）历史上的+年月，查询历史上的今天，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=7&msgmenucontent=历史上的10-23'>历史上的10-23</a>")
+				"7）历史上的+年月，查询历史上的今天，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=7&msgmenucontent=历史上的10-23'>历史上的10-23</a>")
+				.append("\n");
+		buffer.append(
+				"8）微信精选，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=8&msgmenucontent=微信精选'>微信精选</a>")
+				.append("\n");
+		buffer.append(
+				"9）新闻头条，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=9&msgmenucontent=新闻头条'>新闻头条</a>")
 				.append("\n");
 		return buffer.toString();
 	}

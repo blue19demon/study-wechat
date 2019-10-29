@@ -3,22 +3,27 @@ server:
 app:
   serverUrl: http://122.51.69.242
   teplateAuthSuccessMsg: URxUnbbPIuj099nVL1cjgAw49IQnFmcaPTo7irDZjrY
-  tulingKey: f0d99d4e9fc44ec096afdf510c575437
-  tulingAPI: http://www.tuling123.com/openapi/api?key=%s&info=%s
   
-  mobileQueryAPI: https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=%s
-  
-  weatherQueryKey: 9c6cffd8234b72883c8eb29dafaf1186
-  weatherQueryAPI: http://apis.juhe.cn/simpleWeather/query?city=%s&key=%s
-  
-  jokeKey: adfcb4c94398b302dc292480c603e461
-  jokeAPI: http://japi.juhe.cn/joke/content/list.from?sort=desc&page=1&pagesize=5&time=%s&key=%s
-  
-  idcardKey: 71d491b10a631f771ca2c41e1e538ce8
-  idcardAPI: http://apis.juhe.cn/idcard/index?key=%s&cardno=%s
-  
-  hisTodayKey: 30fea9d48adbf81fc86713f5333f8701
-  hisTodayAPI: http://api.juheapi.com/japi/toh?key=%s&v=1.0&month=%s&day=%s
+platform:
+  api:
+    tulingKey: f0d99d4e9fc44ec096afdf510c575437
+    tulingAPI: http://www.tuling123.com/openapi/api?key=%s&info=%s
+    mobileQueryAPI: https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=%s
+    weatherQueryKey: 9c6cffd8234b72883c8eb29dafaf1186
+    weatherQueryAPI: http://apis.juhe.cn/simpleWeather/query?city=%s&key=%s
+    jokeKey: adfcb4c94398b302dc292480c603e461
+    jokeAPI: http://japi.juhe.cn/joke/content/list.from?sort=desc&page=1&pagesize=5&time=%s&key=%s
+    idcardKey: 71d491b10a631f771ca2c41e1e538ce8
+    idcardAPI: http://apis.juhe.cn/idcard/index?key=%s&cardno=%s
+    hisTodayKey: 30fea9d48adbf81fc86713f5333f8701
+    hisTodayAPI: http://api.juheapi.com/japi/toh?key=%s&v=1.0&month=%s&day=%s
+    transApiUrl: http://api.fanyi.baidu.com/api/trans/vip/translate?q=%s&from=auto&to=%s&appid=%s&salt=%s&sign=%s
+    transAppid: 20170322000042938
+    transSecurityKey: xHp5E7D0ULLkVT2Ac3Xg
+    weixinQueryKey: 431456a6ed7048ff0461c92d71acb23f
+    weixinQueryAPI: http://v.juhe.cn/weixin/query?key=%s
+    toutiaoKey: 151cc620a5675c6cc8d7c04f45011206
+    toutiaoAPI: http://v.juhe.cn/toutiao/index?type=%s&key=%s
 spring:
   application:
     name: wx-walk
@@ -64,9 +69,7 @@ baidu:
     mapUrlGetLocation: http://api.map.baidu.com/geocoder?location=%s&output=json&key=%s
     mapConvertUrl: http://api.map.baidu.com/ag/coord/convert?from=2&to=4&x=%s&y=%s
     
-    transApiUrl: http://api.fanyi.baidu.com/api/trans/vip/translate?q=%s&from=auto&to=%s&appid=%s&salt=%s&sign=%s
-    transAppid: 20170322000042938
-    transSecurityKey: xHp5E7D0ULLkVT2Ac3Xg
+    
     
 file:
   path: /home/uploads/
