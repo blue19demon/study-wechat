@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
-import com.starter.config.BaiduApiConfiguration;
+import com.starter.config.disconf.BaiduApiConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
 

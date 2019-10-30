@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
-import com.starter.config.AppConfiguration;
-import com.starter.config.BaiduApiConfiguration;
+import com.starter.config.disconf.AppConfiguration;
+import com.starter.config.disconf.BaiduApiConfiguration;
 import com.starter.domain.UserLocation;
 import com.starter.pojo.BaiduPlace;
 

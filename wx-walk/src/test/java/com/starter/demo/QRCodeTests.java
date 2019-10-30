@@ -18,7 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.github.binarywang.utils.qrcode.QrcodeUtils;
-import com.starter.config.AppConfiguration;
+import com.starter.config.disconf.AppConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;

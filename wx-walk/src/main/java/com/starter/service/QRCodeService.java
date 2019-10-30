@@ -12,11 +12,10 @@ import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.github.binarywang.utils.qrcode.QrcodeUtils;
-import com.starter.config.AppConfiguration;
+import com.starter.config.disconf.AppConfiguration;
 
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.result.WxMediaUploadResult;
@@ -30,22 +29,18 @@ public class QRCodeService {
 	private WxMpService wxMpService;
 	@Autowired
 	private AppConfiguration appConfiguration;
-
-	// 保存到static文件夹下的qrfile目录
-	@Value("${file.path}")
-	private String path;
 	
 	public String QRCodeCreate(String openId,String headImageUrl) {
 		FileOutputStream fos = null;
 		try {
-			File dir=new File(this.path);
+			File dir=new File(this.appConfiguration.getUploadFolder());
 			if(!dir.exists()) {
 				dir.mkdir();
 			}
-			File logoFile=new File(this.path+File.separator+openId+".jpg");
+			File logoFile=new File(this.appConfiguration.getUploadFolder()+File.separator+openId+".jpg");
 			FileDownload.download(headImageUrl,logoFile);
 			byte[] content = QrcodeUtils.createQrcode(appConfiguration.getServerUrl() + "/authorize", logoFile);
-			File outFile = new File(path+File.separator+openId+"_logo.jpg");
+			File outFile = new File(this.appConfiguration.getUploadFolder()+File.separator+openId+"_logo.jpg");
 			fos = new FileOutputStream(outFile);
 			InputStream ips = new ByteArrayInputStream(content);
 			IOUtils.copy(ips, fos);

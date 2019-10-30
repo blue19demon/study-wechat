@@ -3,14 +3,14 @@ package com.starter.api;
 import java.io.File;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.starter.config.PlatformAPIConfig;
+import com.starter.config.disconf.AppConfiguration;
+import com.starter.config.disconf.PlatformAPIConfig;
 import com.starter.service.FileDownload;
 import com.starter.utils.RandomArray;
 
@@ -29,9 +29,8 @@ public class VedioApi {
 	private RestTemplate restTemplate;
 	@Autowired
 	private WxMpService wxMpService;
-	@Value("${file.path}")
-	private String path;
-	
+	@Autowired
+	private AppConfiguration appConfiguration;
 	public static final String ALL="ALL";
 	public static final String ONE="ONE";
 	public String search(String fromUserName, String toUserName,String keyWord) {
@@ -47,7 +46,7 @@ public class VedioApi {
 					int index=(int)(Math.random()*resultArray.size());
 					JSONObject videoJson = resultArray.getJSONObject(index);
 					String video = videoJson.getString("video");
-					File videoFile=new File(this.path+File.separator+"vedio_"+videoJson.getString("sid")+".mp4");
+					File videoFile=new File(this.appConfiguration.getUploadFolder()+File.separator+"vedio_"+videoJson.getString("sid")+".mp4");
 					FileDownload.download(video,videoFile);
 					String thumbMediaId=wxMpService.getMaterialService().mediaUpload(WxConsts.MaterialType.VIDEO,
 							videoFile).getMediaId();

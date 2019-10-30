@@ -20,7 +20,7 @@ import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.BaseWxPayRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.service.WxPayService;
-import com.starter.config.AppConfiguration;
+import com.starter.config.disconf.AppConfiguration;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;

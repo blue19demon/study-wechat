@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,9 +53,12 @@ public class MpController {
 	@Autowired
 	private PlatformApiContext platformApiContext;
 
+	@Value("${spring.profiles.active}")
+	private String env;
 	@GetMapping("/check")
 	public void check(HttpServletRequest request, HttpServletResponse response) {
 		try {
+			log.info("当前环境："+env);
 			String signature = request.getParameter("signature");
 			String nonce = request.getParameter("nonce");
 			String timestamp = request.getParameter("timestamp");
@@ -222,8 +226,9 @@ public class MpController {
 	 * 
 	 * @return
 	 */
-	private static String getSubscribeMsg() {
+	private String getSubscribeMsg() {
 		StringBuffer buffer = new StringBuffer();
+		buffer.append("【"+getEnvName()+"】").append("\n\n");
 		buffer.append("您是否有过出门在外四处找ATM或厕所的经历？").append("\n\n");
 		buffer.append("您是否有过出差在外搜寻美食或娱乐场所的经历？").append("\n\n");
 		buffer.append("周边搜索为您的出行保驾护航，为您提供专业的周边生活指南，回复“附近”开始体验吧！");
@@ -237,8 +242,9 @@ public class MpController {
 	 * 
 	 * @return
 	 */
-	private static String getUsage() {
+	private String getUsage() {
 		StringBuffer buffer = new StringBuffer();
+		buffer.append("【"+getEnvName()+"】").append("\n\n");
 		buffer.append("周边搜索使用说明").append("\n\n");
 		buffer.append("1）发送地理位置").append("\n");
 		buffer.append("点击窗口底部的“+”按钮，选择“位置”，点“发送”").append("\n\n");
@@ -247,8 +253,13 @@ public class MpController {
 		return buffer.toString();
 	}
 
+	private String getEnvName() {
+		return "prod".equals(env)?"生产环境":"测试环境";
+	}
+
 	private String getOtherUsage() {
 		StringBuffer buffer = new StringBuffer();
+		buffer.append("【"+getEnvName()+"】").append("\n\n");
 		buffer.append("聚合功能使用说明").append("\n\n");
 		buffer.append(
 				"1）发送歌曲或者音乐+歌名，例如歌曲许嵩，获取音乐，/::)点我试试<a href='weixin://bizmsgmenu?msgmenuid=1&msgmenucontent=音乐周杰伦'>音乐周杰伦</a>")

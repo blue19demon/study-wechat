@@ -6,14 +6,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.starter.api.VedioApi;
 import com.starter.api.enums.ApiManifest;
 import com.starter.api.strategy.PlatformApiContext;
+import com.starter.config.disconf.AppConfiguration;
 import com.starter.service.FileDownload;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +29,9 @@ public class PushMsgJob {
 	
 	@Autowired
 	private WxMpService wxMpService;
-	@Value("${file.path}")
-	private String path;
+	@Autowired
+	private AppConfiguration appConfiguration;
+	
 	@Autowired
 	private VedioApi vedioApi;
 	@Autowired
@@ -60,7 +60,7 @@ public class PushMsgJob {
 		log.info("pushPic推送结束");
 	}
 	private String getMediaId(String picUrl) throws WxErrorException {
-		File musicFile=new File(this.path+File.separator+"push_pic_"+new SimpleDateFormat("yyyy-MM-dd").format(new Date())+".jpg");
+		File musicFile=new File(this.appConfiguration.getUploadFolder()+File.separator+"push_pic_"+new SimpleDateFormat("yyyy-MM-dd").format(new Date())+".jpg");
 		FileDownload.download(picUrl,musicFile);
 		String thumbMediaId=wxMpService.getMaterialService().mediaUpload(WxConsts.MaterialType.IMAGE,
 				musicFile).getMediaId();

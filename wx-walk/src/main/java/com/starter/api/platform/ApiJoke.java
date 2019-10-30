@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.starter.api.enums.ApiManifest;
 import com.starter.api.strategy.ApiStrategy;
-import com.starter.config.PlatformAPIConfig;
+import com.starter.config.disconf.PlatformAPIConfig;
 
 @Component
 public class ApiJoke extends ApiStrategy {
