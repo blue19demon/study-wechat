@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width,user-scalable=no" />
 <head>
 <meta charset="UTF-8">
-<title>授权</title>
+<title>授权体验</title>
 <script type="text/javascript" th:src="@{/js/jquery-2.0.0.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/my_location.js}"></script>
 <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
@@ -34,13 +34,16 @@
 <body>
 	<div class="login-container">
 		<div class="form-container">
-			<p class="title">授权结果</p>
-			<p><input type="hidden" id="openId" th:value="${wxMpUser.openId}"></p>
-			<p>微信账号：<span th:text="${wxMpUser.openId}"></span></p>
-			<p>昵称：<span th:text="${wxMpUser.nickname}"></span></p>
-            <p>头像：<img th:src="${wxMpUser.headImgUrl}" style="width: 60px;height: 60px;border-radius: 60px;">
-            <p>性别：<span th:text="${wxMpUser.sexDesc}"></span></p>
-            <p>地区：<span th:text="${wxMpUser.country}+'-'+${wxMpUser.province}+'-'+${wxMpUser.city}"></span></p>
+			<p class="title">授权体验</p>
+			<img th:src="@{/img/wechat_icon.jpg}"
+				style="width: 50px; height: 50px; border-radius: 50px;" /> <a
+				th:href="@{/wechatAuthorize}">微信</a> <img
+				th:src="@{/img/aply_icon.jpg}"
+				style="width: 50px; height: 50px; border-radius: 50px;" /> <a
+				th:href="@{/aliAuthorize}">支付宝</a> <img
+				th:src="@{/img/oauth_icon.jpg}"
+				style="width: 50px; height: 50px; border-radius: 50px;" /> <a
+				href="http://www.openjust.xyz:83/">体验更多OAuth2.0</a>
 		</div>
 	</div>
 </body>

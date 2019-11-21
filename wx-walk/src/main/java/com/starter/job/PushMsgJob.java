@@ -12,7 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.starter.api.VedioApi;
 import com.starter.api.enums.ApiManifest;
 import com.starter.api.strategy.PlatformApiContext;
-import com.starter.config.disconf.AppConfiguration;
+import com.starter.config.app.AppConfiguration;
 import com.starter.service.FileDownload;
 
 import lombok.extern.slf4j.Slf4j;

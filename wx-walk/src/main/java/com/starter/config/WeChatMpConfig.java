@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.alibaba.fastjson.JSONObject;
-import com.starter.config.disconf.RedisConfiguration;
-import com.starter.config.disconf.WxMpConfiguration;
+import com.starter.config.app.RedisConfiguration;
+import com.starter.config.app.WxMpConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.mp.api.WxMpService;

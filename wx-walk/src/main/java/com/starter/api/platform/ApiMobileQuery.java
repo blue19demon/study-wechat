@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSONObject;
 import com.starter.api.enums.ApiManifest;
 import com.starter.api.strategy.ApiStrategy;
-import com.starter.config.disconf.PlatformAPIConfig;
+import com.starter.config.app.PlatformAPIConfig;
 @Component
 public class ApiMobileQuery extends ApiStrategy {
 	@Autowired

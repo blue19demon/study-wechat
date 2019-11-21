@@ -16,7 +16,7 @@ import com.starter.api.BaiduMapApi;
 import com.starter.domain.UserLocation;
 
 @Controller
-public class JSSDKController {
+public class BaiduMapController {
 	
 	
 	@Autowired
@@ -46,10 +46,13 @@ public class JSSDKController {
 		return baiduMapApi.getLocation(bd09Lat.concat(",").concat(bd09Lng));
 	}
 	
-	@GetMapping("/getLocation")
-	public String getLocation(HttpServletRequest request, HttpServletResponse response) {
-		return "getLocation";
+	@GetMapping("/baiduLocation")
+	public String baiduLocation(HttpServletRequest request, HttpServletResponse response) {
+		return "baiduLocation";
 	}
-	
+	@GetMapping("/myLocation")
+	public String myLocation(HttpServletRequest request, HttpServletResponse response) {
+		return "myLocation";
+	}
 	
 }

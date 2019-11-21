@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<meta name="viewport" content="width=device-width,user-scalable=no" />
+<head>
+    <meta charset="UTF-8">
+    <title>支付通知</title>
+    <script type="text/javascript" th:src="@{/js/jquery-2.0.0.min.js}"></script>
+</head>
+ 
+<style>
+    .login-container {
+        margin: 10px;
+        width: 100%;
+    }
+ 
+    .form-container {
+        margin: 0px auto;
+        width: 90%;
+        text-align: center;
+        box-shadow: 1px 1px 10px #888888;
+        height: 600px;
+        padding: 5px;
+    }
+ 
+    .title{
+        margin-top: 5px;
+        font-size: 18px;
+        color: #E9686B;
+    }
+</style>
+<body>
+<div class="login-container">
+   <div class="login-container">
+		<div class="form-container">
+			<p class="title">支付通知</p>
+			<h5 class="title">trade_no:${trade_no}</h5>
+			<h5 class="title">out_trade_no:${out_trade_no}</h5>
+			<h5 class="title">total_amount:${total_amount}</h5>
+		</div>
+	</div>
+</div>
+</body>
+</html>

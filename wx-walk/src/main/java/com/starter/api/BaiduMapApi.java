@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONObject;
-import com.starter.config.disconf.AppConfiguration;
-import com.starter.config.disconf.BaiduApiConfiguration;
+import com.starter.config.app.AppConfiguration;
+import com.starter.config.app.BaiduMapConfiguration;
 import com.starter.domain.UserLocation;
 import com.starter.pojo.BaiduPlace;
 
@@ -27,7 +27,7 @@ import com.starter.pojo.BaiduPlace;
 @Service
 public class BaiduMapApi {
 	@Autowired
-	private BaiduApiConfiguration baiduApiConfiguration;
+	private BaiduMapConfiguration baiduApiConfiguration;
 	@Autowired
 	private AppConfiguration appConfiguration;
 	@Autowired
@@ -36,14 +36,15 @@ public class BaiduMapApi {
 	 * 圆形区域检索
 	 * 
 	 * @param query 检索关键词
-	 * @param lng 经度
-	 * @param lat 纬度
+	 * @param lng   经度
+	 * @param lat   纬度
 	 * @return List<BaiduPlace>
 	 * @throws UnsupportedEncodingException
 	 */
 	public List<BaiduPlace> searchPlace(String query, String lng, String lat) throws Exception {
 		// 拼装请求地址
-		String api = String.format(baiduApiConfiguration.getMapUrlPlaceSearch(),query,lat+","+lng, baiduApiConfiguration.getMapAk());
+		String api = String.format(baiduApiConfiguration.getMapUrlPlaceSearch(), query, lat + "," + lng,
+				appConfiguration.getRadius(), baiduApiConfiguration.getMapAk());
 		// 调用Place API圆形区域检索
 		String respXml = httpRequest(api);
 		// 解析返回的xml
@@ -67,7 +68,7 @@ public class BaiduMapApi {
 	 * @param inputStream 输入流
 	 * @return List<BaiduPlace>
 	 */
-	private  List<BaiduPlace> parsePlaceXml(String xml) {
+	private List<BaiduPlace> parsePlaceXml(String xml) {
 		List<BaiduPlace> placeList = null;
 		try {
 			Document document = DocumentHelper.parseText(xml);
@@ -129,8 +130,8 @@ public class BaiduMapApi {
 	 * 根据Place组装图文列表
 	 * 
 	 * @param placeList
-	 * @param bd09Lng 经度
-	 * @param bd09Lat 纬度
+	 * @param bd09Lng   经度
+	 * @param bd09Lat   纬度
 	 * @return List<Article>
 	 */
 	public String makeArticleList(List<BaiduPlace> placeList, String bd09Lng, String bd09Lat) {
@@ -138,12 +139,15 @@ public class BaiduMapApi {
 		String basePath = appConfiguration.getServerUrl();
 		BaiduPlace place = null;
 		StringBuffer buffer = new StringBuffer();
+		buffer.append("百度地图：\n");
 		for (int i = 0; i < placeList.size(); i++) {
 			place = placeList.get(i);
 			buffer.append(place.getName() + "\n");
-			String route = String.format(basePath + "/route?p1=%s,%s&p2=%s,%s", bd09Lng, bd09Lat, place.getLng(), place.getLat());
-			buffer.append("<a href='"+route+"'>点击导航</a>").append("\n");
+			String route = String.format(basePath + "/route?p1=%s,%s&p2=%s,%s", bd09Lng, bd09Lat, place.getLng(),
+					place.getLat());
+			buffer.append("<a href='" + route + "'>点击导航</a>").append("\n");
 		}
+		
 		return buffer.toString();
 	}
 
@@ -156,7 +160,7 @@ public class BaiduMapApi {
 	 */
 	public UserLocation convertCoord(String lng, String lat) {
 		// 百度坐标转换接口
-		String api = String.format(baiduApiConfiguration.getMapConvertUrl(),lng, lat);
+		String api = String.format(baiduApiConfiguration.getMapConvertUrl(), lng, lat);
 		UserLocation location = new UserLocation();
 		try {
 			String jsonCoord = httpRequest(api);
@@ -171,7 +175,7 @@ public class BaiduMapApi {
 		}
 		return location;
 	}
-	
+
 	/**
 	 * 获取位置
 	 * 
@@ -181,10 +185,12 @@ public class BaiduMapApi {
 	 */
 	public String getLocation(String mjkd_latlng) {
 		// 百度位置检索
-		String api = String.format(baiduApiConfiguration.getMapUrlGetLocation(),mjkd_latlng, baiduApiConfiguration.getMapAk());
+		String api = String.format(baiduApiConfiguration.getMapUrlGetLocation(), mjkd_latlng,
+				baiduApiConfiguration.getMapAk());
 		try {
 			String jsonCoord = httpRequest(api);
-			String formatted_address =JSONObject.parseObject(jsonCoord).getJSONObject("result").getString("formatted_address");
+			String formatted_address = JSONObject.parseObject(jsonCoord).getJSONObject("result")
+					.getString("formatted_address");
 			return formatted_address;
 		} catch (Exception e) {
 			e.printStackTrace();

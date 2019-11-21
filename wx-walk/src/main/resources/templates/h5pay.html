@@ -1,38 +1,46 @@
-<script>
-    function onBridgeReady(){
-        WeixinJSBridge.invoke(
-            'getBrandWCPayRequest', {
-                "appId":"${payResponse.appId}",     //公众号名称，由商户传入
-                "timeStamp":"${payResponse.timeStamp}",         //时间戳，自1970年以来的秒数
-                "nonceStr":"${payResponse.nonceStr}", //随机串
-                "package":"${payResponse.packageValue}",
-                "signType":"MD5",         //微信签名方式：
-                "paySign":"${payResponse.sign}" //微信签名
-            },
-            function(res){
-                if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-                    alert('支付成功');
-                }else if(res.err_msg == "get_brand_wcpay_request:cancel") {
-                    alert('支付过程中用户取消');
-                }else if(res.err_msg == "get_brand_wcpay_request:fail") {
-                    alert('支付失败');
-                }else {
-                    alert('未知异常');
-                }
-                if(res.err_msg == "get_brand_wcpay_request:ok" ) {}     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。-->
-                alert(res.err_msg);
-                location.href="/demo/success";
-            }
-        );
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<meta name="viewport" content="width=device-width,user-scalable=no" />
+<head>
+    <meta charset="UTF-8">
+    <title>选择支付方式</title>
+    <script type="text/javascript" th:src="@{/js/jquery-2.0.0.min.js}"></script>
+</head>
+ 
+<style>
+    .login-container {
+        margin: 10px;
+        width: 100%;
     }
-    if (typeof WeixinJSBridge == "undefined"){
-        if( document.addEventListener ){
-            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-        }else if (document.attachEvent){
-            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-        }
-    }else{
-        onBridgeReady();
+ 
+    .form-container {
+        margin: 0px auto;
+        width: 90%;
+        text-align: center;
+        box-shadow: 1px 1px 10px #888888;
+        height: 600px;
+        padding: 5px;
     }
-</script>
+ 
+    .title{
+        margin-top: 5px;
+        font-size: 18px;
+        color: #E9686B;
+    }
+</style>
+<body>
+<div class="login-container">
+   <div class="login-container">
+		<div class="form-container">
+			<p class="title">一分钱支付体验</p>
+			<img th:src="@{/img/wechat_icon.jpg}" style="width: 50px; height: 50px;border-radius: 50px;" />
+			<a th:href="@{/wechatH5pay}">微信</a>
+			<img th:src="@{/img/aply_icon.jpg}" style="width: 50px; height: 50px;border-radius: 50px;" />
+			<a th:href="@{/aliH5pay}">支付宝</a>
+			<p class="title">【支付宝支付正在调试，如需体验，请点击公众号菜单：更多>支付宝体验更多】</p>
+			<p class="title">如交易查询，退款，退款查询，交易关闭，对账单下载，提现，PC操作等功能</p>
+		</div>
+	</div>
+</div>
+</body>
+</html>

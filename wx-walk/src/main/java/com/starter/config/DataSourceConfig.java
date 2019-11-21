@@ -7,7 +7,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.starter.config.disconf.DSConfiguration;
+import com.starter.config.app.DSConfiguration;
 
 @Configuration
 public class DataSourceConfig {

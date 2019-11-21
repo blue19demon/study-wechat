@@ -1,7 +1,6 @@
 package com.starter.controller;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,14 +16,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.starter.api.BaiduMapApi;
+import com.starter.api.GaodeMapApi;
 import com.starter.api.MusicApi;
 import com.starter.api.VedioApi;
 import com.starter.api.enums.ApiManifest;
+import com.starter.api.enums.MapProvider;
 import com.starter.api.strategy.PlatformApiContext;
+import com.starter.config.app.AppConfiguration;
 import com.starter.domain.UserLocation;
 import com.starter.pojo.BaiduPlace;
+import com.starter.pojo.GaodePlace;
+import com.starter.service.JedisService;
 import com.starter.service.QRCodeService;
 import com.starter.service.UserLocationService;
+import com.starter.utils.CheckoutUtil;
 
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
@@ -45,6 +50,8 @@ public class MpController {
 	@Autowired
 	private BaiduMapApi baiduMapApi;
 	@Autowired
+	private GaodeMapApi gaodeMapApi;
+	@Autowired
 	private MusicApi musicApi;
 	@Autowired
 	private VedioApi vedioApi;
@@ -52,7 +59,10 @@ public class MpController {
 	private QRCodeService QRCodeService;
 	@Autowired
 	private PlatformApiContext platformApiContext;
-
+	@Autowired
+	private AppConfiguration appConfiguration;
+	@Autowired
+	private JedisService jedisService;
 	@Value("${spring.profiles.active}")
 	private String env;
 	@GetMapping("/check")
@@ -63,7 +73,7 @@ public class MpController {
 			String nonce = request.getParameter("nonce");
 			String timestamp = request.getParameter("timestamp");
 
-			if (!wxMpService.checkSignature(timestamp, nonce, signature)) {
+			if (!CheckoutUtil.checkSignature(signature, timestamp, nonce)) {
 				// 消息签名不正确，说明不是公众平台发过来的消息
 				log.info("非法请求");
 				return;
@@ -119,26 +129,51 @@ public class MpController {
 					respContent = platformApiContext.excuteHttp(content.substring(4), ApiManifest.TOUTIAO);
 				} else if (content.startsWith("搞笑达人")) {
 					respXml = vedioApi.search(fromUserName, toUserName, VedioApi.ALL);
+				} else if (content.equals("百度地图")) {
+					jedisService.setProvider(fromUserName, MapProvider.BAIDU);
+					respContent="当前地图服务商为：百度地图，您可以输入搜索关键词获取周边信息了";
+				}else if (content.equals("高德地图")) {
+					respContent="当前地图服务商为：高德地图，您可以输入搜索关键词获取周边信息了";
+					jedisService.setProvider(fromUserName, MapProvider.GAODE);
 				}
 				// 周边搜索
 				else if (content.startsWith("附近")) {
 					String keyWord = content.replaceAll("附近", "").trim();
+					jedisService.setSearch(fromUserName, keyWord);
 					// 获取用户最后一次发送的地理位置
 					UserLocation location = userLocationService.getLastLocation(request, fromUserName);
 					// 未获取到
 					if (null == location) {
 						respContent = getUsage();
 					} else {
-						// 根据转换后（纠偏）的坐标搜索周边POI
-						List<BaiduPlace> placeList = baiduMapApi.searchPlace(keyWord, location.getBd09Lng(),
-								location.getBd09Lat());
-						// 未搜索到POI
-						if (null == placeList || 0 == placeList.size()) {
-							respContent = String.format("/难过，您发送的位置附近未搜索到“%s”信息！", keyWord);
-						} else {
-							respContent = baiduMapApi.makeArticleList(placeList,
-									location.getBd09Lng(), location.getBd09Lat());
+						String mapProviderName = jedisService.getProvider(fromUserName);
+						if(mapProviderName==null) {
+							respContent = setProiderUsage();
+						}else {
+							MapProvider mapProvider= MapProvider.getByName(mapProviderName);
+							System.out.println("mapProvider="+mapProvider.name());
+							if(mapProvider==MapProvider.BAIDU) {
+								// 根据转换后（纠偏）的坐标搜索周边POI
+								List<BaiduPlace> placeList = baiduMapApi.searchPlace(keyWord, location.getBd09Lng(),
+										location.getBd09Lat());
+								// 未搜索到POI
+								if (null == placeList || 0 == placeList.size()) {
+									respContent = String.format("/难过，您发送的位置附近未搜索到“%s”信息！", keyWord);
+								} else {
+									respContent = baiduMapApi.makeArticleList(placeList,
+											location.getBd09Lng(), location.getBd09Lat());}
+							}else if(mapProvider==MapProvider.GAODE) {
+								List<GaodePlace> placeList = gaodeMapApi.searchPlace(keyWord, location.getLng(),
+										location.getLat());
+								if (null == placeList || 0 == placeList.size()) {
+									respContent = String.format("/难过，您发送的位置附近未搜索到“%s”信息！", keyWord);
+								} else {
+									respContent = gaodeMapApi.makeArticleList(placeList,
+											location.getLng(), location.getLat());}
+							}
 						}
+						
+						
 					}
 				} else {
 					respContent = platformApiContext.excuteHttp(content, ApiManifest.TULING);
@@ -180,10 +215,13 @@ public class MpController {
 				if (eventType.equals(WxConsts.EventType.CLICK)) {
 					if ("MY_CARD".equals(inMessage.getEventKey())) {
 						return getMyCard(request, fromUserName, toUserName);
-					} else if ("HIS_TODAY".equals(inMessage.getEventKey())) {
-						SimpleDateFormat smf = new SimpleDateFormat("yyyy-MM-dd");
+					} else if ("ALI_PAY".equals(inMessage.getEventKey())) {
+						//SimpleDateFormat smf = new SimpleDateFormat("yyyy-MM-dd");
 						//respContent = platformApiContext.excuteHttp(smf.format(new Date()), ApiManifest.HIS_TODAY);
-						respContent = platformApiContext.excuteHttp(null, ApiManifest.HIS_TODAY_NEW);
+						respContent = "<a href='"+appConfiguration.getServerUrl().concat(":70")+"'>体验支付宝</a>".concat("\n")
+								.concat("账号:pwcyeq1339@sandbox.com")
+								.concat("\n")
+								.concat("登陆/支付密码:111111");
 					} else if ("MAIN_MENU".equals(inMessage.getEventKey())) {
 						respContent = getOtherUsage();
 					} else if ("JOKE_VEDIO".equals(inMessage.getEventKey())) {
@@ -206,6 +244,14 @@ public class MpController {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private String setProiderUsage() {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("指定地图供应商").append("\n");
+		buffer.append("<a href='weixin://bizmsgmenu?msgmenuid=11&msgmenucontent=百度地图'>百度地图</a>").append("\n");
+		buffer.append("<a href='weixin://bizmsgmenu?msgmenuid=12&msgmenucontent=高德地图'>高德地图</a>").append("\n");
+		return buffer.toString();
 	}
 
 	private String getMyCard(HttpServletRequest request, String fromUserName, String toUserName) {
@@ -248,7 +294,10 @@ public class MpController {
 		buffer.append("周边搜索使用说明").append("\n\n");
 		buffer.append("1）发送地理位置").append("\n");
 		buffer.append("点击窗口底部的“+”按钮，选择“位置”，点“发送”").append("\n\n");
-		buffer.append("2）指定关键词搜索").append("\n");
+		buffer.append("2）指定地图供应商").append("\n");
+		buffer.append("<a href='weixin://bizmsgmenu?msgmenuid=11&msgmenucontent=百度地图'>百度地图</a>").append("\n");
+		buffer.append("<a href='weixin://bizmsgmenu?msgmenuid=12&msgmenucontent=高德地图'>高德地图</a>").append("\n");
+		buffer.append("3）指定关键词搜索").append("\n");
 		buffer.append("格式：附近+关键词\n例如：附近ATM、附近KTV、附近厕所");
 		return buffer.toString();
 	}

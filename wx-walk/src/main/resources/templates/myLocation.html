@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<head>
+<meta charset="UTF-8">
+<title>获取地理位置</title>
+</head>
+<style>
+.login-container {
+	margin: 10px;
+	width: 100%;
+}
+
+.form-container {
+	margin: 0px auto;
+	width: 90%;
+	text-align: center;
+	box-shadow: 1px 1px 10px #888888;
+	height: 600px;
+	padding: 5px;
+}
+
+.title {
+	margin-top: 5px;
+	font-size: 18px;
+	color: #E9686B;
+}
+</style>
+</head>
+<body>
+	<div class="login-container">
+		<div class="form-container">
+			<p class="title">我的位置</p>
+			<img th:src="@{/img/baiduMap.jpg}"
+				style="width: 50px; height: 50px; border-radius: 50px;" /> <a
+				th:href="@{/baiduLocation}">百度</a> <img
+				th:src="@{/img/gaodeMap.jpg}"
+				style="width: 50px; height: 50px; border-radius: 50px;" /> <a
+				th:href="@{/gaode/gaodeLocation}">高德</a>
+		</div>
+	</div>
+</body>
+</html>

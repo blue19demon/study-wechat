@@ -12,7 +12,7 @@ import com.binarywang.spring.starter.wxjava.pay.properties.WxPayProperties;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.github.binarywang.wxpay.service.impl.WxPayServiceImpl;
-import com.starter.config.disconf.WxPayConfiguration;
+import com.starter.config.app.WxPayConfiguration;
 
 import lombok.AllArgsConstructor;
 

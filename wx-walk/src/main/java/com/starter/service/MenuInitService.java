@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.starter.config.disconf.AppConfiguration;
+import com.starter.config.app.AppConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.menu.WxMenu;
@@ -65,7 +65,7 @@ public class MenuInitService {
 			button023.setName("授权");
 			button023.setType("view");
 			button023.setKey("ITEM05");
-			button023.setUrl(appConfiguration.getServerUrl()+"/authorize");
+			button023.setUrl(appConfiguration.getServerUrl()+"/oauth");
 			subButtons02.add(button023);
 			
 			WxMenuButton button024 = new WxMenuButton();
@@ -79,7 +79,7 @@ public class MenuInitService {
 			button025.setName("我的位置");
 			button025.setType("view");
 			button025.setKey("ITEM06");
-			button025.setUrl(appConfiguration.getServerUrl()+"/getLocation");
+			button025.setUrl(appConfiguration.getServerUrl()+"/myLocation");
 			subButtons02.add(button025);
 			
 			button02.setSubButtons(subButtons02);
@@ -98,9 +98,9 @@ public class MenuInitService {
 			subButtons03.add(button031);
 			
 			WxMenuButton button032 = new WxMenuButton();
-			button032.setName("历史上的今天");
+			button032.setName("支付宝体验更多");
 			button032.setType("click");
-			button032.setKey("HIS_TODAY");
+			button032.setKey("ALI_PAY");
 			subButtons03.add(button032);
 			
 			WxMenuButton button033 = new WxMenuButton();

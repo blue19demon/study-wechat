@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
-import com.starter.config.disconf.BaiduApiConfiguration;
+import com.starter.config.app.BaiduMapConfiguration;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +22,7 @@ public class MapTests {
 	@Autowired
 	private RestTemplate restTemplate;
 	@Autowired
-	private BaiduApiConfiguration baiduApiConfiguration;
+	private BaiduMapConfiguration baiduApiConfiguration;
 	@Test
 	public void geocoder() throws UnsupportedEncodingException {
 		String api = String.format(baiduApiConfiguration.getMapUrlGetLocation(), "39.912176,116.683371", baiduApiConfiguration.getMapAk());

@@ -9,8 +9,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.starter.config.disconf.AppConfiguration;
-import com.starter.config.disconf.PlatformAPIConfig;
+import com.starter.config.app.AppConfiguration;
+import com.starter.config.app.PlatformAPIConfig;
 import com.starter.service.FileDownload;
 import com.starter.utils.RandomArray;
 

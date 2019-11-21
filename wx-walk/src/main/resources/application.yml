@@ -1,4 +1,75 @@
 spring:
   profiles:
-    active: '@spring.profiles.active@'
-      
+    active: prod
+
+platform:
+  api:
+    hisTodayAPI: http://api.juheapi.com/japi/toh?key=%s&v=1.0&month=%s&day=%s
+    hisTodayKey: 30fea9d48adbf81fc86713f5333f8701
+    hisTodayNewAPI: https://www.ipip5.com/today/api.php?type=json
+    idcardAPI: http://apis.juhe.cn/idcard/index?key=%s&cardno=%s
+    idcardKey: 71d491b10a631f771ca2c41e1e538ce8
+    jokeAPI: http://japi.juhe.cn/joke/content/list.from?sort=desc&page=1&pagesize=5&time=%s&key=%s
+    jokeKey: adfcb4c94398b302dc292480c603e461
+    mobileQueryAPI: https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=%s
+    musicAPI: https://api.apiopen.top/searchMusic?name=%s
+    satinApi: https://www.apiopen.top/satinApi?type=1&page=1
+    toutiaoAPI: http://v.juhe.cn/toutiao/index?type=%s&key=%s
+    toutiaoKey: 151cc620a5675c6cc8d7c04f45011206
+    transApiUrl: http://api.fanyi.baidu.com/api/trans/vip/translate?q=%s&from=auto&to=%s&appid=%s&salt=%s&sign=%s
+    transAppid: 20170322000042938
+    transSecurityKey: xHp5E7D0ULLkVT2Ac3Xg
+    tulingAPI: http://www.tuling123.com/openapi/api?key=%s&info=%s
+    tulingKey: f0d99d4e9fc44ec096afdf510c575437
+    vedioDetailAPI: https://api.apiopen.top/getSingleJoke?sid=%s
+    vedioSearchAPI: https://api.apiopen.top/getJoke?page=1&count=50&type=video
+    weatherQueryAPI: http://apis.juhe.cn/simpleWeather/query?city=%s&key=%s
+    weatherQueryKey: 9c6cffd8234b72883c8eb29dafaf1186
+    weixinQueryAPI: http://v.juhe.cn/weixin/query?key=%s
+    weixinQueryKey: 431456a6ed7048ff0461c92d71acb23f
+
+baidu:
+  api:
+    mapAk: gYPKBfcQee3nAx5jx71VxiBHyl0EbRKT
+    mapConvertUrl: http://api.map.baidu.com/ag/coord/convert?from=2&to=4&x=%s&y=%s
+    mapUrlGetLocation: http://api.map.baidu.com/geocoder?location=%s&output=json&key=%s
+    mapUrlPlaceSearch: http://api.map.baidu.com/place/v2/search?query=%s&location=%s&radius=%s&output=xml&ak=%s
+
+gaode:
+  api:
+    aroundSearchUrl: https://restapi.amap.com/v3/place/around?key=%s&location=%s&keywords=%s&radius=%s
+    webkey: 86c6640374d4c79e670877384139e7a5
+ds:
+  driverClassName: com.mysql.cj.jdbc.Driver
+  type: com.zaxxer.hikari.HikariDataSource
+  url: jdbc:mysql://127.0.0.1:3306/wxWalk?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&useSSL=false
+  username: root
+  password: 123456
+    
+app:
+  serverUrl: http://www.openjust.xyz
+  teplateAuthSuccessMsg: URxUnbbPIuj099nVL1cjgAw49IQnFmcaPTo7irDZjrY
+  uploadFolder: /home/uploads
+  radius: 2000
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+
+mp:
+  appId: wx0985b6dbaeeff28c
+  secret: d3ba2d045ffc578abd0e9d23f8c93404
+  token: imook
+
+pay:
+  appId: wx4492fde581248a1d
+  mchId: 1512382871
+  mchKey: 1492b9eb24ac067333d714412dd591d1
+
+alipay:
+  alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuQm5GBcgZtj1G6KhXwXY7rKzMwrm9kcBJFURq7xtb5nsaLasfl6vfKtzTDtnfIKOZayTVfqJKS1hrgAIYDfddZOJHMYAwte80D4kd1IkVc4B8PxHELs76rxaVR+fz69BzIzuyySJcY85ceHVDzdlQzDzHgdWAvkMpqt0HFuWUUlvAeK8wF+PXiZAwzmd8vtqRuJ08amG2gEEIuhgXlBD9MxFKMGgHaaIAaunHnWyWLrqtJispr/mlFx0zXa8aSMhLU/xoHspMTm/gpwHAmSt7ebyj4IkC04SkfMAq5RzQtuf86V6zULAj/zr98+YieOSk2tj1vl/KxtpvyQnpYimPwIDAQAB
+  appId: 2016080700186744
+  gateteWay: https://openapi.alipaydev.com/gateway.do
+  privateKey: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCZvaUVgA6RoqkZF7fc5EK5CJUkYu8O84Sozz3B6Tvsq5mRoNQAFdJTaw/Qxm8WtHg6cg1VjtOXjGAAVy/m79DUKEthHgSs2hhntWac2WB34j2Z3U2AKNkk6MWkSub0I8TmLzsiz4j8vxVpbxkWUKPvFdWCODZzJ18YJms0AVWJ7wOFwuZPkiBlsa/fDFSXVuEF5xG4p2fbPvxog0h/mjR8kxzX9J6TUsBr+7xPLbEw4vhZ5UOxZ7YDClZWNyH/iRofNIQ7xR9jovpJDFkPI1WbLFzkBbSRC15fHyQHcnp54T0gWmhJHa3r4TRDtkNBTEujeGyy4+scA4OVX3Et3mwdAgMBAAECggEAQHndaxfqhD9ghYqB7Jy6Mtmbmsf3FCEiyJ0pfFJxdD8/R2jYoDSGob9rwZYG7tG+/lvopbIhoRQZCuuFxmdbAC7p9g/dzBQnWg8kurEbmQuD5CyAnTgEYUtR4CYdl9QMdrDmLyI0hDMrKq2SKt6k8dcJVPR4OXEQm5M5MHVCx3aUJK6sIp766vBejMl6LNcitz7LIXLe51Gs9nhD5b8CNrDIhG+VXzFDu79eJvO3FPBseARLs56xzKvZqnnQ1/JtnhzAc17qhq4jjuHlKlITR4LCvxF+cDXSyDmipMvZr6BubV4QElLluEi8H/+EfSft9+nvdIhv4C1nGiIQfkwSjQKBgQDSgC/mXLEYhjTfvYGmBAHo8MKeazyCpCJ2HiXxOH33fddVNgObQ1w+u42cToSNZnaz1HJpEOdI9opH3kcGQ4LHwdih+yze6/9XA1jeK99uutXopNUKJCi/d9Co+C2tHtUSXLkhVzTJQ+FGxeZmxgt8RJvXfTJy5ls0hhHMiwiZzwKBgQC6+LaLXEu100Ff7lnNMDBguUgCJs9wRirDaKIwF8uRj6veiLogVl/cITIm6STGmwvcuFWLgPz2O921FjDGDj0Ew2bLdZuKapMVk1lf0Zpz7xmtPeltHObqJJlntchs8LJ9XTdTB/mtSoccGiAuoE0Q+yUgo3Y1gU3309vT0XwSUwKBgGewEOguHGXyJbVYSbaXHsG5ZoRWWlYXt4nrS9FIfHQenqUwmBIw2g1koVqvKofkQvBN45VxaBv+pRrFmMKzGoZ/K9COQwoDwaEA2xOFFOgcTCXum6oFKbU2taelqAowt8/1sJOFu1CwiRUtglJ5l0q9GO7KksEaSy7SI45XpgLtAoGBAJ/YlE+ul3eaZXC7WIDoquN2Y86bGYuWIWcwZECTh1EpsDkvUVjmH0wWAUds2SkGUuzflxsOKrXk1pXDo+0fLSGOYKqfIFwE4zx13dniW5a0GpKWtKK5K92PbqtQqUohuacd83eEAPwbFEl9OHhESb6zx7kQprX1lw/CS1Ta6qTLAoGABYqII9WFlnQ38CDmMt9BTlqlf7Ftj6ZtHO7mhH0XBRkvlMUUgqlu6WKezd7EMHZvr5KEh4tkkHozq/N7OkAjzUERJRBPm6HaocbfAmFSvBEAuE+bTczmLH6cdJX3nLYIjnCVG507VTqDucPXOgX/8kBzBPBROLmPd2vCdZwkd5U=
+  signType: RSA2
+  authGateWay: https://openauth.alipaydev.com/oauth2/publicAppAuthorize.htm?app_id=%s&scope=auth_user&redirect_uri=%s
