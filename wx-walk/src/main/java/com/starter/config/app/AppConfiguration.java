@@ -16,4 +16,7 @@ public class AppConfiguration {
 	 * 搜索范围（单位：米）
 	 */
 	private String radius;
+	private String sysOpenId;
+	private String remoteStart;
+	private String remoteStop;
 }

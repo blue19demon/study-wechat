@@ -153,7 +153,7 @@ public class OAuthController {
 		WxMpUser wxMpUser = wxMpService.getUserService().userInfo(openId);
 		WxMpTemplateMessage templateMessage = new WxMpTemplateMessage();
 		templateMessage.setToUser(wxMpUser.getOpenId());
-		templateMessage.setUrl(appConfiguration.getServerUrl() + "\\mapLocation");
+		templateMessage.setUrl(appConfiguration.getServerUrl() + "/myLocation");
 		templateMessage.setTemplateId(appConfiguration.getTeplateAuthSuccessMsg());
 		templateMessage.setData(Arrays.asList(new WxMpTemplateData("title", "您在【" + formatted_address + "】授权成功"),
 				new WxMpTemplateData("name", wxMpUser.getNickname()),

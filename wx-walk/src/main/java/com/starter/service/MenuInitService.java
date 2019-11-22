@@ -104,9 +104,9 @@ public class MenuInitService {
 			subButtons03.add(button032);
 			
 			WxMenuButton button033 = new WxMenuButton();
-			button033.setName("百思不得其解");
+			button033.setName("远程控制服务器");
 			button033.setType("click");
-			button033.setKey("JOKE_VEDIO");
+			button033.setKey("REMOTE_CONTROLLER");
 			subButtons03.add(button033);
 			
 			WxMenuButton button034 = new WxMenuButton();

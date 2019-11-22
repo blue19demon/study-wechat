@@ -28,6 +28,7 @@ import com.starter.pojo.BaiduPlace;
 import com.starter.pojo.GaodePlace;
 import com.starter.service.JedisService;
 import com.starter.service.QRCodeService;
+import com.starter.service.RemoteCommandService;
 import com.starter.service.UserLocationService;
 import com.starter.utils.CheckoutUtil;
 
@@ -65,10 +66,13 @@ public class MpController {
 	private JedisService jedisService;
 	@Value("${spring.profiles.active}")
 	private String env;
+	@Autowired
+	private RemoteCommandService remoteCommandService;
+
 	@GetMapping("/check")
 	public void check(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			log.info("当前环境："+env);
+			log.info("当前环境：" + env);
 			String signature = request.getParameter("signature");
 			String nonce = request.getParameter("nonce");
 			String timestamp = request.getParameter("timestamp");
@@ -112,7 +116,7 @@ public class MpController {
 				} else if (content.startsWith("翻译")) {
 					respContent = platformApiContext.excuteHttp(content.substring(2), ApiManifest.BAIDU_TRANS);
 				} else if (content.startsWith("音乐") || content.startsWith("歌曲")) {
-					respXml = musicApi.search(fromUserName,toUserName,content.substring(2));
+					respXml = musicApi.search(fromUserName, toUserName, content.substring(2));
 				} else if (content.startsWith("手机号")) {
 					respContent = platformApiContext.excuteHttp(content.substring(3), ApiManifest.MOBILE_QUERY);
 				} else if (content.startsWith("天气")) {
@@ -131,10 +135,14 @@ public class MpController {
 					respXml = vedioApi.search(fromUserName, toUserName, VedioApi.ALL);
 				} else if (content.equals("百度地图")) {
 					jedisService.setProvider(fromUserName, MapProvider.BAIDU);
-					respContent="当前地图服务商为：百度地图，您可以输入搜索关键词获取周边信息了";
-				}else if (content.equals("高德地图")) {
-					respContent="当前地图服务商为：高德地图，您可以输入搜索关键词获取周边信息了";
+					respContent = "当前地图服务商为：百度地图，您可以输入搜索关键词获取周边信息了";
+				} else if (content.equals("高德地图")) {
+					respContent = "当前地图服务商为：高德地图，您可以输入搜索关键词获取周边信息了";
 					jedisService.setProvider(fromUserName, MapProvider.GAODE);
+				} else if (content.equals("远程停服")) {
+					respContent = remoteCommandService.excuteStop();
+				} else if (content.equals("远程发版")) {
+					respContent = remoteCommandService.excuteStart();
 				}
 				// 周边搜索
 				else if (content.startsWith("附近")) {
@@ -147,12 +155,12 @@ public class MpController {
 						respContent = getUsage();
 					} else {
 						String mapProviderName = jedisService.getProvider(fromUserName);
-						if(mapProviderName==null) {
+						if (mapProviderName == null) {
 							respContent = setProiderUsage();
-						}else {
-							MapProvider mapProvider= MapProvider.getByName(mapProviderName);
-							System.out.println("mapProvider="+mapProvider.name());
-							if(mapProvider==MapProvider.BAIDU) {
+						} else {
+							MapProvider mapProvider = MapProvider.getByName(mapProviderName);
+							System.out.println("mapProvider=" + mapProvider.name());
+							if (mapProvider == MapProvider.BAIDU) {
 								// 根据转换后（纠偏）的坐标搜索周边POI
 								List<BaiduPlace> placeList = baiduMapApi.searchPlace(keyWord, location.getBd09Lng(),
 										location.getBd09Lat());
@@ -160,20 +168,21 @@ public class MpController {
 								if (null == placeList || 0 == placeList.size()) {
 									respContent = String.format("/难过，您发送的位置附近未搜索到“%s”信息！", keyWord);
 								} else {
-									respContent = baiduMapApi.makeArticleList(placeList,
-											location.getBd09Lng(), location.getBd09Lat());}
-							}else if(mapProvider==MapProvider.GAODE) {
+									respContent = baiduMapApi.makeArticleList(placeList, location.getBd09Lng(),
+											location.getBd09Lat());
+								}
+							} else if (mapProvider == MapProvider.GAODE) {
 								List<GaodePlace> placeList = gaodeMapApi.searchPlace(keyWord, location.getLng(),
 										location.getLat());
 								if (null == placeList || 0 == placeList.size()) {
 									respContent = String.format("/难过，您发送的位置附近未搜索到“%s”信息！", keyWord);
 								} else {
-									respContent = gaodeMapApi.makeArticleList(placeList,
-											location.getLng(), location.getLat());}
+									respContent = gaodeMapApi.makeArticleList(placeList, location.getLng(),
+											location.getLat());
+								}
 							}
 						}
-						
-						
+
 					}
 				} else {
 					respContent = platformApiContext.excuteHttp(content, ApiManifest.TULING);
@@ -196,7 +205,7 @@ public class MpController {
 				userLocationService.saveUserLocation(inMessage.getLabel(), fromUserName, lng, lat, bd09Lng, bd09Lat);
 
 				StringBuffer buffer = new StringBuffer();
-				buffer.append("[愉快]").append("成功接收您的位置:【"+inMessage.getLabel()+"】！").append("\n\n");
+				buffer.append("[愉快]").append("成功接收您的位置:【" + inMessage.getLabel() + "】！").append("\n\n");
 				buffer.append("您可以输入搜索关键词获取周边信息了，例如：").append("\n");
 				buffer.append("        附近ATM").append("\n");
 				buffer.append("        附近KTV").append("\n");
@@ -216,16 +225,17 @@ public class MpController {
 					if ("MY_CARD".equals(inMessage.getEventKey())) {
 						return getMyCard(request, fromUserName, toUserName);
 					} else if ("ALI_PAY".equals(inMessage.getEventKey())) {
-						//SimpleDateFormat smf = new SimpleDateFormat("yyyy-MM-dd");
-						//respContent = platformApiContext.excuteHttp(smf.format(new Date()), ApiManifest.HIS_TODAY);
-						respContent = "<a href='"+appConfiguration.getServerUrl().concat(":70")+"'>体验支付宝</a>".concat("\n")
-								.concat("账号:pwcyeq1339@sandbox.com")
-								.concat("\n")
-								.concat("登陆/支付密码:111111");
+						// SimpleDateFormat smf = new SimpleDateFormat("yyyy-MM-dd");
+						// respContent = platformApiContext.excuteHttp(smf.format(new Date()),
+						// ApiManifest.HIS_TODAY);
+						respContent = "<a href='" + appConfiguration.getServerUrl().concat(":70") + "'>体验支付宝</a>"
+								.concat("\n").concat("账号:pwcyeq1339@sandbox.com").concat("\n").concat("登陆/支付密码:111111");
 					} else if ("MAIN_MENU".equals(inMessage.getEventKey())) {
 						respContent = getOtherUsage();
 					} else if ("JOKE_VEDIO".equals(inMessage.getEventKey())) {
 						respXml = vedioApi.search(fromUserName, toUserName, VedioApi.ONE);
+					} else if ("REMOTE_CONTROLLER".equals(inMessage.getEventKey())) {
+						respContent = getRemoteControllerUsage(fromUserName);
 					}
 				}
 			} else {
@@ -244,6 +254,18 @@ public class MpController {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private String getRemoteControllerUsage(String fromUserName) {
+		StringBuffer buffer = new StringBuffer();
+		if(fromUserName.equals(appConfiguration.getSysOpenId())) {
+			buffer.append("远程控制命令").append("\n\n");
+			buffer.append("<a href='weixin://bizmsgmenu?msgmenuid=13&msgmenucontent=远程停服'>远程停服</a>").append("\n\n");
+			buffer.append("<a href='weixin://bizmsgmenu?msgmenuid=14&msgmenucontent=远程发版'>远程发版</a>").append("\n\n");
+		}else {
+			buffer.append("您没有权限执行该操作，请联系管理员").append("\n");
+		}
+		return buffer.toString();
 	}
 
 	private String setProiderUsage() {
@@ -274,7 +296,7 @@ public class MpController {
 	 */
 	private String getSubscribeMsg() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("【"+getEnvName()+"】").append("\n\n");
+		buffer.append("【" + getEnvName() + "】").append("\n\n");
 		buffer.append("您是否有过出门在外四处找ATM或厕所的经历？").append("\n\n");
 		buffer.append("您是否有过出差在外搜寻美食或娱乐场所的经历？").append("\n\n");
 		buffer.append("周边搜索为您的出行保驾护航，为您提供专业的周边生活指南，回复“附近”开始体验吧！");
@@ -290,7 +312,7 @@ public class MpController {
 	 */
 	private String getUsage() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("【"+getEnvName()+"】").append("\n\n");
+		buffer.append("【" + getEnvName() + "】").append("\n\n");
 		buffer.append("周边搜索使用说明").append("\n\n");
 		buffer.append("1）发送地理位置").append("\n");
 		buffer.append("点击窗口底部的“+”按钮，选择“位置”，点“发送”").append("\n\n");
@@ -303,12 +325,12 @@ public class MpController {
 	}
 
 	private String getEnvName() {
-		return "prod".equals(env)?"生产环境":"测试环境";
+		return "prod".equals(env) ? "生产环境" : "测试环境";
 	}
 
 	private String getOtherUsage() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("【"+getEnvName()+"】").append("\n\n");
+		buffer.append("【" + getEnvName() + "】").append("\n\n");
 		buffer.append("聚合功能使用说明").append("\n\n");
 		buffer.append(
 				"1）发送歌曲或者音乐+歌名，例如歌曲许嵩，获取音乐，/::)点我试试<a href='weixin://bizmsgmenu?msgmenuid=1&msgmenucontent=音乐周杰伦'>音乐周杰伦</a>")
@@ -329,14 +351,11 @@ public class MpController {
 		buffer.append(
 				"7）历史上的+年月，查询历史上的今天，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=7&msgmenucontent=历史上的10-23'>历史上的10-23</a>")
 				.append("\n");
-		buffer.append(
-				"8）微信精选，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=8&msgmenucontent=微信精选'>微信精选</a>")
+		buffer.append("8）微信精选，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=8&msgmenucontent=微信精选'>微信精选</a>")
 				.append("\n");
-		buffer.append(
-				"9）新闻头条，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=9&msgmenucontent=新闻头条'>新闻头条</a>")
+		buffer.append("9）新闻头条，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=9&msgmenucontent=新闻头条'>新闻头条</a>")
 				.append("\n");
-		buffer.append(
-				"10）搞笑达人，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=10&msgmenucontent=搞笑达人'>搞笑达人</a>")
+		buffer.append("10）搞笑达人，/::)点我试试\n<a href='weixin://bizmsgmenu?msgmenuid=10&msgmenucontent=搞笑达人'>搞笑达人</a>")
 				.append("\n");
 		return buffer.toString();
 	}

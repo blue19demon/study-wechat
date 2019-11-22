@@ -51,6 +51,9 @@ app:
   teplateAuthSuccessMsg: URxUnbbPIuj099nVL1cjgAw49IQnFmcaPTo7irDZjrY
   uploadFolder: /home/uploads
   radius: 2000
+  sysOpenId: o0BJQ5uR7L6QjrwRek8sklsuOXpc
+  remoteStart: http://www.openjust.xyz:73/excuteStart
+  remoteStop: http://www.openjust.xyz:73/excuteStop
 
 redis:
   host: 127.0.0.1
