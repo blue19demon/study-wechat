@@ -3,6 +3,6 @@ spring:
     active: prod
     
 app:
-  tencentCloudIp: 
-  tencentCloudUsername: 
-  tencentCloudPasswd: 
+  tencentCloudIp: 122.51.211.33
+  tencentCloudUsername: root
+  tencentCloudPasswd: eyIN2zKWs2x

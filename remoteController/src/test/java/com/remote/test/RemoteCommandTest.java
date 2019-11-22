@@ -11,7 +11,6 @@ import com.remote.core.RemoteCommandService;
 import com.remote.framework.CommandShell;
 import com.remote.framework.RestResultDto;
 
-import ch.ethz.ssh2.Connection;
 import lombok.extern.slf4j.Slf4j;
 
 @RunWith(SpringRunner.class)
@@ -25,8 +24,7 @@ public class RemoteCommandTest {
 	public void execute() {
 		RestResultDto login = remoteCommandService.login();
 		if (login.isSuccess()) {
-			Connection conn = (Connection) login.getBody();
-			log.info(JSONObject.toJSONString(remoteCommandService.execute(conn, CommandShell.CMD_STOP_WXWALK), true));
+			log.info(JSONObject.toJSONString(remoteCommandService.execute(CommandShell.CMD_STOP_WXWALK), true));
 		}
 	}
 }

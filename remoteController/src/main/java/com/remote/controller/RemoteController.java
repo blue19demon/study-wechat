@@ -9,8 +9,6 @@ import com.remote.core.RemoteCommandService;
 import com.remote.framework.CommandShell;
 import com.remote.framework.RestResultDto;
 
-import ch.ethz.ssh2.Connection;
-
 @Controller
 public class RemoteController {
 
@@ -22,8 +20,7 @@ public class RemoteController {
 	public RestResultDto excuteStart() {
 		RestResultDto login = remoteCommandService.login();
 		if (login.isSuccess()) {
-			Connection conn = (Connection) login.getBody();
-			return remoteCommandService.execute(conn, CommandShell.CMD_START_WXWALK);
+			return remoteCommandService.execute(CommandShell.CMD_START_WXWALK);
 		}
 		return login;
 	}
@@ -33,8 +30,7 @@ public class RemoteController {
 	public RestResultDto excuteStop() {
 		RestResultDto login = remoteCommandService.login();
 		if (login.isSuccess()) {
-			Connection conn = (Connection) login.getBody();
-			return remoteCommandService.execute(conn, CommandShell.CMD_STOP_WXWALK);
+			return remoteCommandService.execute(CommandShell.CMD_STOP_WXWALK);
 		}
 		return login;
 	}
